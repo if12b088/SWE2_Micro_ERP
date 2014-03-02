@@ -1,4 +1,4 @@
-package application;
+package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
