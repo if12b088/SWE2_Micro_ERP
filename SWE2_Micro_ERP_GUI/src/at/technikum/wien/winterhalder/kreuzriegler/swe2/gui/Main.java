@@ -3,17 +3,19 @@ package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = new BorderPane();
-			Scene scene = new Scene(root,400,400);
+			Pane root = (Pane)FXMLLoader.load(getClass().getResource("main.fxml"));
+			Scene scene = new Scene(root,800,600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("Micro ERP");
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

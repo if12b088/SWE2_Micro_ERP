@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller.ContactController">
+<children><TitledPane fx:id="companyPane" animated="false" prefHeight="131.0" prefWidth="600.0" text="Firma">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="150.0" prefWidth="200.0">
+<children><Label layoutX="25.0" layoutY="20.0" text="Name" /><Label layoutX="25.0" layoutY="60.0" text="UID" /><TextField fx:id="companyName" layoutX="100.0" layoutY="15.0" prefWidth="450.0" promptText="Firmenname" /><TextField fx:id="UID" layoutX="100.0" layoutY="55.0" prefWidth="450.0" promptText="UID" />
+</children></AnchorPane>
+  </content>
+</TitledPane><TitledPane fx:id="personPane" animated="false" layoutY="130.0" prefWidth="600.0" text="Person">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+<children><Label layoutX="25.0" layoutY="20.0" text="Vorname" /><Label layoutX="25.0" layoutY="60.0" text="Nachname" /><Label layoutX="25.0" layoutY="100.0" text="Suffix" /><Label layoutX="25.0" layoutY="140.0" text="Geburtstag" /><TextField fx:id="firstName" layoutX="100.0" layoutY="15.0" prefWidth="450.0" promptText="Vorname" /><TextField fx:id="lastName" layoutX="100.0" layoutY="55.0" prefWidth="450.0" promptText="Nachname" /><TextField fx:id="fkCompany" layoutX="346.0" layoutY="135.0" prefHeight="26.0" prefWidth="134.0" /><Button layoutX="486.0" layoutY="135.0" mnemonicParsing="false" text="Suchen" /><TextField fx:id="birthday" layoutX="100.0" layoutY="135.0" prefHeight="26.0" prefWidth="147.0" /><Label layoutX="307.0" layoutY="140.0" text="Firma" /><TextField fx:id="suffix" layoutX="100.0" layoutY="95.0" prefWidth="450.0" promptText="Nachname" />
+</children></AnchorPane>
+  </content>
+</TitledPane><TitledPane fx:id="addressPane" animated="false" layoutY="357.0" prefHeight="130.0" prefWidth="600.0" text="Adresse">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+<children><Label layoutX="25.0" layoutY="20.0" text="Adresse" /><Label layoutX="25.0" layoutY="60.0" text="PLZ" /><Label layoutX="280.0" layoutY="60.0" text="Ort" /><TextField fx:id="addressAddress" layoutX="100.0" layoutY="15.0" prefWidth="450.0" /><TextField fx:id="addressZIP" layoutX="100.0" layoutY="55.0" prefWidth="150.0" /><TextField fx:id="addressCity" layoutX="320.0" layoutY="55.0" prefHeight="26.0" prefWidth="230.0" />
+</children></AnchorPane>
+  </content>
+</TitledPane><TitledPane fx:id="shippingAddressPane" animated="false" layoutY="487.0" prefHeight="130.0" prefWidth="600.0" text="Lieferadresse">
+<content>
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+<children>
+<Label layoutX="25.0" layoutY="20.0" text="Adresse" />
+<Label layoutX="25.0" layoutY="60.0" text="PLZ" />
+<Label layoutX="280.0" layoutY="60.0" text="Ort" />
+<TextField fx:id="shippingAddressAddress" layoutX="100.0" layoutY="15.0" prefWidth="450.0" />
+<TextField fx:id="shippingAddressZIP" layoutX="100.0" layoutY="55.0" prefWidth="150.0" />
+<TextField fx:id="shippingAddressCity" layoutX="320.0" layoutY="55.0" prefHeight="26.0" prefWidth="230.0" />
+</children>
+</AnchorPane>
+</content>
+</TitledPane><Button fx:id="saveBtn" layoutX="503.0" layoutY="759.0" mnemonicParsing="false" text="Speichern" /><Button layoutX="396.0" layoutY="759.0" mnemonicParsing="false" text="Abbrechen" /><TitledPane fx:id="invoiceAddressPane" animated="false" layoutY="617.0" prefHeight="130.0" prefWidth="600.0" text="Rechnungsadresse">
+<content>
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+<children>
+<Label layoutX="25.0" layoutY="20.0" text="Adresse" />
+<Label layoutX="25.0" layoutY="60.0" text="PLZ" />
+<Label layoutX="280.0" layoutY="60.0" text="Ort" />
+<TextField fx:id="invoiceAddressAddress" layoutX="100.0" layoutY="15.0" prefWidth="450.0" />
+<TextField fx:id="invoiceAddressZIP" layoutX="100.0" layoutY="55.0" prefWidth="150.0" />
+<TextField fx:id="invoiceAddressCity" layoutX="320.0" layoutY="55.0" prefHeight="26.0" prefWidth="230.0" />
+</children>
+</AnchorPane>
+</content>
+</TitledPane>
+</children></AnchorPane>
