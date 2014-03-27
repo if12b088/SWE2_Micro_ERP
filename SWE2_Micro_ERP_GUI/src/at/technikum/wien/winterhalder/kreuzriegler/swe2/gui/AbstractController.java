@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller.ContactController;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -43,21 +45,60 @@ public abstract class AbstractController implements Initializable {
 			e.printStackTrace();
 		}
 	}
-	//TODO unused!
-	public void openInNewWindow(String resource){
+	
+	public void openContactInNewWindow(ContactDto dto) {
 		Stage newStage = new Stage();
 		try {
-			Pane root = (Pane)FXMLLoader.load(getClass().getResource(resource));
-			Scene scene = new Scene(root,600,800);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			FXMLLoader fl = new FXMLLoader();
+			fl.setLocation(getClass().getResource("view/Contact.fxml"));
+			fl.load();
+			Parent root = fl.getRoot();
+			// Pane root = (Pane) fl.load(getClass().getResource(resource));
+
+			ContactController controller = (ContactController) fl
+					.getController();
+			controller.setDto(dto);
+			
+			Scene scene = new Scene(root, 600, 800);
+			scene.getStylesheets().add(
+					getClass().getResource("application.css").toExternalForm());
 			newStage.setScene(scene);
 			newStage.setTitle("Micro ERP");
 			newStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	//TODO unused!
+
+//	public void openContactInNewWindow(ContactDto dto) {
+//		openInNewWindow<ContactDto, ContactController>("view/Contact.fxml", dto);
+//	}
+//
+//	public <TDTO, TCONTROLLER> void openInNewWindow(String resource, TDTO dto) {
+//		Stage newStage = new Stage();
+//		try {
+//			FXMLLoader fl = new FXMLLoader();
+//			fl.setLocation(getClass().getResource(resource));
+//			fl.load();
+//			Parent root = fl.getRoot();
+//			// Pane root = (Pane) fl.load(getClass().getResource(resource));
+//
+//			TCONTROLLER controller = (TCONTROLLER) fl
+//					.getController();
+//			controller.setDto(dto);
+//			
+//			Scene scene = new Scene(root, 600, 800);
+//			scene.getStylesheets().add(
+//					getClass().getResource("application.css").toExternalForm());
+//			newStage.setScene(scene);
+//			newStage.setTitle("Micro ERP");
+//			newStage.show();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+
+	// TODO unused!
 	private void show(String resource, String title, Modality m,
 			String... cssList) throws IOException {
 
@@ -84,12 +125,14 @@ public abstract class AbstractController implements Initializable {
 		newStage.setTitle(title);
 		newStage.show();
 	}
-	//TODO unused!
+
+	// TODO unused!
 	public void show(String resource, String title, String... cssList)
 			throws IOException {
 		show(resource, title, Modality.NONE, cssList);
 	}
-	//TODO unused!
+
+	// TODO unused!
 	public void showDialog(String resource, String title, String... cssList)
 			throws IOException {
 		show(resource, title, Modality.WINDOW_MODAL, cssList);

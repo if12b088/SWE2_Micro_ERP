@@ -199,26 +199,26 @@ public class ContactModel {
 	}
 	//get Dtos
 	public ContactDto getContactDto(){
-		copyProperties();
+		copyPropertiesToDto();
 		return contactDto;
 	}
 	
 	public AddressDto getAddressDto(){
-		copyProperties();
+		copyPropertiesToDto();
 		return addressDto;
 	}
 
 	public AddressDto getShippingAddressDto(){
-		copyProperties();
+		copyPropertiesToDto();
 		return shippingAddressDto;
 	}
 	
 	public AddressDto getInvoiceAddressDto(){
-		copyProperties();
+		copyPropertiesToDto();
 		return invoiceAddressDto;
 	}
 	
-	private void copyProperties(){
+	private void copyPropertiesToDto(){
 		contactDto.setCompanyname(companyName.get());
 		contactDto.setUid(UID.get());
 		contactDto.setFirstname(firstName.get());
@@ -227,16 +227,29 @@ public class ContactModel {
 	//	contactDto.setBirthday(birthDate.get());
 	//	contactDto.setCompanyId(fkCompany);
 		
-		addressDto.setAdress(addressAddress.get());
+		addressDto.setStreet(addressAddress.get());
 		addressDto.setZip(addressZIP.get());
 		addressDto.setCity(addressCity.get());
 		
-		shippingAddressDto.setAdress(shippingAddressAddress.get());
+		shippingAddressDto.setStreet(shippingAddressAddress.get());
 		shippingAddressDto.setZip(shippingAddressZIP.get());
 		shippingAddressDto.setCity(shippingAddressAddress.get());
 		
-		invoiceAddressDto.setAdress(invoiceAddressAddress.get());
+		invoiceAddressDto.setStreet(invoiceAddressAddress.get());
 		invoiceAddressDto.setZip(invoiceAddressZIP.get());
 		invoiceAddressDto.setCity(invoiceAddressCity.get());
+	}
+	
+	private void copyDtoToProperties(){
+		companyNameProperty().set(contactDto.getCompanyname());
+		UIDProperty().set(contactDto.getUid());
+		firstNameProperty().set(contactDto.getFirstname());
+		lastNameProperty().set(contactDto.getLastname());
+		suffixProperty().set(contactDto.getSuffix());
+	}
+
+	public void setDto(ContactDto dto) {
+		contactDto = dto;
+		copyDtoToProperties();
 	}
 }

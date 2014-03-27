@@ -36,7 +36,7 @@
 </children>
 </AnchorPane>
 </content>
-</TitledPane><Button fx:id="saveBtn" layoutX="503.0" layoutY="759.0" mnemonicParsing="false" text="Speichern" /><Button layoutX="396.0" layoutY="759.0" mnemonicParsing="false" text="Abbrechen" /><TitledPane fx:id="invoiceAddressPane" animated="false" layoutY="617.0" prefHeight="130.0" prefWidth="600.0" text="Rechnungsadresse">
+</TitledPane><Button fx:id="saveBtn" layoutX="503.0" layoutY="759.0" mnemonicParsing="false" onAction="#onSave" text="Speichern" /><Button layoutX="396.0" layoutY="759.0" mnemonicParsing="false" text="Abbrechen" /><TitledPane fx:id="invoiceAddressPane" animated="false" layoutY="617.0" prefHeight="130.0" prefWidth="600.0" text="Rechnungsadresse">
 <content>
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
 <children>

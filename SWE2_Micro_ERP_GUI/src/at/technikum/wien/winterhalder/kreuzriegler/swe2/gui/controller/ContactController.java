@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 
 public class ContactController implements Initializable{
@@ -125,6 +126,11 @@ public class ContactController implements Initializable{
 //				
 //			}
 //		});
+		
+	}
+
+	public void setDto(ContactDto dto) {
+		model.setDto(dto);
 		
 	}
 }

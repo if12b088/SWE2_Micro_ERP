@@ -6,7 +6,7 @@ import java.util.List;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.IContactProxy;
 
-public class ProxyMock implements IContactProxy{
+public class ContactProxyMock implements IContactProxy{
 
 	@Override
 	public List<ContactDto> getContactBySearchString(String search) {
