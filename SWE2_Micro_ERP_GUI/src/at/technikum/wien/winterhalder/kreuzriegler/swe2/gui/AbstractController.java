@@ -45,8 +45,8 @@ public abstract class AbstractController implements Initializable {
 			e.printStackTrace();
 		}
 	}
-	
-	public void openContactInNewWindow(ContactDto dto) {
+
+	public void openContactInNewWindow2(ContactDto dto) {
 		Stage newStage = new Stage();
 		try {
 			FXMLLoader fl = new FXMLLoader();
@@ -58,7 +58,7 @@ public abstract class AbstractController implements Initializable {
 			ContactController controller = (ContactController) fl
 					.getController();
 			controller.setDto(dto);
-			
+
 			Scene scene = new Scene(root, 600, 800);
 			scene.getStylesheets().add(
 					getClass().getResource("application.css").toExternalForm());
@@ -70,33 +70,36 @@ public abstract class AbstractController implements Initializable {
 		}
 	}
 
-//	public void openContactInNewWindow(ContactDto dto) {
-//		openInNewWindow<ContactDto, ContactController>("view/Contact.fxml", dto);
-//	}
-//
-//	public <TDTO, TCONTROLLER> void openInNewWindow(String resource, TDTO dto) {
-//		Stage newStage = new Stage();
-//		try {
-//			FXMLLoader fl = new FXMLLoader();
-//			fl.setLocation(getClass().getResource(resource));
-//			fl.load();
-//			Parent root = fl.getRoot();
-//			// Pane root = (Pane) fl.load(getClass().getResource(resource));
-//
-//			TCONTROLLER controller = (TCONTROLLER) fl
-//					.getController();
-//			controller.setDto(dto);
-//			
-//			Scene scene = new Scene(root, 600, 800);
-//			scene.getStylesheets().add(
-//					getClass().getResource("application.css").toExternalForm());
-//			newStage.setScene(scene);
-//			newStage.setTitle("Micro ERP");
-//			newStage.show();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	public void openContactInNewWindow(ContactDto dto) {
+		ContactController controller = openInNewWindow("view/Contact.fxml");
+		controller.setDto(dto);
+	}
+
+	public <TCONTROLLER> TCONTROLLER openInNewWindow(String resource) {
+		Stage newStage = new Stage();
+		try {
+			FXMLLoader fl = new FXMLLoader();
+			fl.setLocation(getClass().getResource(resource));
+			fl.load();
+			Parent root = fl.getRoot();
+			// Pane root = (Pane) fl.load(getClass().getResource(resource));
+
+			TCONTROLLER controller = fl.getController();
+
+			Scene scene = new Scene(root, 600, 800);
+			scene.getStylesheets().add(
+					getClass().getResource("application.css").toExternalForm());
+			newStage.setScene(scene);
+			newStage.setTitle("Micro ERP");
+			newStage.show();
+			
+			return controller;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	// TODO unused!
 	private void show(String resource, String title, Modality m,
@@ -124,17 +127,5 @@ public abstract class AbstractController implements Initializable {
 		newStage.setScene(scene);
 		newStage.setTitle(title);
 		newStage.show();
-	}
-
-	// TODO unused!
-	public void show(String resource, String title, String... cssList)
-			throws IOException {
-		show(resource, title, Modality.NONE, cssList);
-	}
-
-	// TODO unused!
-	public void showDialog(String resource, String title, String... cssList)
-			throws IOException {
-		show(resource, title, Modality.WINDOW_MODAL, cssList);
 	}
 }
