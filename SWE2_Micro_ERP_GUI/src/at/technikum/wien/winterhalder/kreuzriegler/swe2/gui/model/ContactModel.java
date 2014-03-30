@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.AddressDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.enums.AddressType;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Utils;
 
 public class ContactModel {
@@ -246,6 +247,28 @@ public class ContactModel {
 		firstNameProperty().set(contactDto.getFirstname());
 		lastNameProperty().set(contactDto.getLastname());
 		suffixProperty().set(contactDto.getSuffix());
+		
+		//Address
+		if(contactDto.getAddresses().containsKey(AddressType.PRIMARY)){
+			AddressDto addressDto = contactDto.getAddresses().get(AddressType.PRIMARY);
+			addressAddressProperty().set(addressDto.getStreet());
+			addressZIPProperty().set(addressDto.getZip());
+			addressCityProperty().set(addressDto.getCity());
+		}
+		//Shipping Address
+		if(contactDto.getAddresses().containsKey(AddressType.SHIPPING)){
+			AddressDto addressDto = contactDto.getAddresses().get(AddressType.SHIPPING);
+			shippingAddressAddressProperty().set(addressDto.getStreet());
+			shippingAddressZIPProperty().set(addressDto.getZip());
+			shippingAddressCityProperty().set(addressDto.getCity());
+		}
+		//Invoice Address
+		if(contactDto.getAddresses().containsKey(AddressType.INVOICE)){
+			AddressDto addressDto = contactDto.getAddresses().get(AddressType.INVOICE);
+			invoiceAddressAddressProperty().set(addressDto.getStreet());
+			invoiveAddressZIPProperty().set(addressDto.getZip());
+			invoiceAddressCityProperty().set(addressDto.getCity());
+		}
 	}
 
 	public void setDto(ContactDto dto) {
