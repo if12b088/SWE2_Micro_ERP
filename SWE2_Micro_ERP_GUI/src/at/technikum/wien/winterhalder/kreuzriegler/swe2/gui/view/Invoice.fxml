@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller.InvoiceController">
+<content><VBox>
+<children><TitledPane animated="false" minHeight="335.0" prefWidth="598.0" text="MetaDaten">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0">
+<children><Label layoutX="20.0" layoutY="10.0" text="RechnungsNr.:" textAlignment="RIGHT" /><Label layoutX="20.0" layoutY="75.0" text="Information:" textAlignment="RIGHT" /><Label layoutX="20.0" layoutY="190.0" text="Kommentar:" textAlignment="RIGHT" /><TextField fx:id="invoiceNumber" layoutX="20.0" layoutY="30.0" prefHeight="26.0" prefWidth="201.0" /><TextArea fx:id="invoiceInformation" layoutX="20.0" layoutY="95.0" prefHeight="80.0" prefWidth="550.0" /><TextArea fx:id="invoiceComment" layoutX="20.0" layoutY="210.0" prefHeight="80.0" prefWidth="550.0" />
+</children></AnchorPane>
+  </content>
+</TitledPane><TitledPane animated="false" prefHeight="450.0" text="Rechnungszeilen">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0">
+<children><ListView fx:id="invoiceRowListView" layoutX="20.0" layoutY="150.0" prefHeight="245.0" prefWidth="550.0" /><TextField fx:id="invoiceRowName" layoutX="20.0" layoutY="30.0" prefHeight="26.0" prefWidth="550.0" /><TextField fx:id="invoiceRowAmount" layoutX="20.0" layoutY="95.0" prefHeight="26.0" prefWidth="100.0" /><TextField fx:id="invoiceRowPrice" layoutX="150.0" layoutY="95.0" prefHeight="26.0" prefWidth="100.0" /><TextField fx:id="invoiceRowUst" layoutX="280.0" layoutY="95.0" prefHeight="26.0" prefWidth="100.0" /><Label layoutX="20.0" layoutY="10.0" text="Name" /><Label layoutX="20.0" layoutY="75.0" text="Anzahl" /><Label layoutX="150.0" layoutY="75.0" text="Preis" /><Label layoutX="280.0" layoutY="75.0" text="UST" /><Label layoutX="130.0" layoutY="100.0" text="x" /><Button fx:id="invoiceRowAddButton" layoutX="407.0" layoutY="95.0" mnemonicParsing="false" text="+" /><Button fx:id="invoiceRowRemoveButton" layoutX="444.0" layoutY="95.0" mnemonicParsing="false" text="-" />
+</children></AnchorPane>
+  </content>
+</TitledPane>
+</children></VBox>
+</content>
+</ScrollPane>
