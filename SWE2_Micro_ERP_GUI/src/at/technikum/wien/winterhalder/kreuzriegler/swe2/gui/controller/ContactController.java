@@ -74,17 +74,9 @@ public class ContactController implements Initializable{
 	private TextField invoiceAddressZIP;
 	@FXML
 	private TextField invoiceAddressCity;
-	
-
 	@FXML
 	private Button saveBtn;
 	
-	@FXML
-	private void onSave(ActionEvent event){
-		//TODO saveToDB
-		System.out.println("saveBtn");
-	}
-
 	ContactModel model;
 	
 	@Override
@@ -115,22 +107,17 @@ public class ContactController implements Initializable{
 		invoiceAddressAddress.textProperty().bindBidirectional(model.invoiceAddressAddressProperty());
 		invoiceAddressZIP.textProperty().bindBidirectional(model.invoiveAddressZIPProperty());
 		invoiceAddressCity.textProperty().bindBidirectional(model.invoiceAddressCityProperty());
-		
-//		saveBtn.setOnAction(new EventHandler<ActionEvent>() {
-//			
-//			@Override
-//			public void handle(ActionEvent event) {
-//				
-//				//TODO saveToDB
-//				System.out.println("saveBtn");
-//				
-//			}
-//		});
-		
+				
 	}
 
 	public void setDto(ContactDto dto) {
 		model.setDto(dto);
 		
+	}
+	
+	@FXML
+	private void onSave(ActionEvent event){
+		//TODO saveToDB
+		System.out.println("saveBtn");
 	}
 }

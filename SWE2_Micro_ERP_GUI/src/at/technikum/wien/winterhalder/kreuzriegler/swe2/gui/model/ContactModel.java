@@ -20,7 +20,7 @@ public class ContactModel {
 	
 	//Company
 	private StringProperty companyName = new SimpleStringProperty();
-	private StringProperty UID = new SimpleStringProperty();
+	private StringProperty uid = new SimpleStringProperty();
 	//Person
 	private StringProperty firstName = new SimpleStringProperty();
 	private StringProperty lastName = new SimpleStringProperty();
@@ -89,7 +89,7 @@ public class ContactModel {
 	}
 
 	public final StringProperty UIDProperty() {
-		return UID;
+		return uid;
 	}
 	//person
 	public final StringProperty firstNameProperty() {
@@ -154,12 +154,12 @@ public class ContactModel {
 		return companyName.get();
 	}
 
-	public String getUID() {
-		return UID.get();
+	public String getUid() {
+		return uid.get();
 	}
 
-	public void setUID(String uID) {
-		UID.set(uID);
+	public void setUid(String uID) {
+		uid.set(uID);
 	}
 	public String getFirstName() {
 		return firstName.get();
@@ -221,7 +221,7 @@ public class ContactModel {
 	
 	private void copyPropertiesToDto(){
 		contactDto.setCompanyname(companyName.get());
-		contactDto.setUid(UID.get());
+		contactDto.setUid(uid.get());
 		contactDto.setFirstname(firstName.get());
 		contactDto.setLastname(lastName.get());
 		contactDto.setSuffix(suffix.get());
