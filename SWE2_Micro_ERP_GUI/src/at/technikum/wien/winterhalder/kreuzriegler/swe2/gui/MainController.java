@@ -20,30 +20,59 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 
 public class MainController extends AbstractController {
 
-	@FXML
-	private Pane mainWindow;
+    @FXML // fx:id="searchDateFromTextField"
+    private TextField searchDateFromTextField; // Value injected by FXMLLoader
 
-	@FXML
-	private Button searchButton;
+    @FXML // fx:id="contactListView"
+    private ListView<ContactDto> contactListView; // Value injected by FXMLLoader
 
-	@FXML
-	private Button addContactButton;
+    @FXML // fx:id="searchInvoiceButton"
+    private Button searchInvoiceButton; // Value injected by FXMLLoader
 
-	@FXML
-	private TextField searchKontaktTextField;
+    @FXML // fx:id="addContactButton"
+    private Button addContactButton; // Value injected by FXMLLoader
 
-	@FXML
-	private ListView<ContactDto> contactListView;
+    @FXML // fx:id="searchContactTextField"
+    private TextField searchContactTextField; // Value injected by FXMLLoader
+
+    @FXML // fx:id="searchInvoiceTextField"
+    private TextField searchInvoiceTextField; // Value injected by FXMLLoader
+
+    @FXML // fx:id="searchAmountFromTextField"
+    private TextField searchAmountFromTextField; // Value injected by FXMLLoader
+
+    @FXML // fx:id="searchAmountToTextField"
+    private TextField searchAmountToTextField; // Value injected by FXMLLoader
+
+    @FXML // fx:id="searchDateToTextField"
+    private TextField searchDateToTextField; // Value injected by FXMLLoader
+
+    @FXML // fx:id="addInvoiceButton"
+    private Button addInvoiceButton; // Value injected by FXMLLoader
+
+    @FXML // fx:id="invoiceListView"
+    private ListView<?> invoiceListView; // Value injected by FXMLLoader
+
+    @FXML // fx:id="searchContactButton"
+    private Button searchContactButton; // Value injected by FXMLLoader
 
 	ObservableList<ContactDto> items = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL url, ResourceBundle resources) {
 
+		assert searchDateFromTextField != null : "fx:id=\"searchDateFromTextField\" was not injected: check your FXML file 'Main.fxml'.";
 		assert contactListView != null : "fx:id=\"contactListView\" was not injected: check your FXML file 'Main.fxml'.";
-		assert searchKontaktTextField != null : "fx:id=\"searchKontaktTextField\" was not injected: check your FXML file 'Main.fxml'.";
-		assert searchButton != null : "fx:id=\"searchButton\" was not injected: check your FXML file 'Main.fxml'.";
-		assert addContactButton != null : "fx:id=\"addKontaktButton\" was not injected: check your FXML file 'Main.fxml'.";
+		assert searchInvoiceButton != null : "fx:id=\"searchInvoiceButton\" was not injected: check your FXML file 'Main.fxml'.";
+		assert addContactButton != null : "fx:id=\"addContactButton\" was not injected: check your FXML file 'Main.fxml'.";
+		assert searchContactTextField != null : "fx:id=\"searchContactTextField\" was not injected: check your FXML file 'Main.fxml'.";
+		assert searchInvoiceTextField != null : "fx:id=\"searchInvoiceTextField\" was not injected: check your FXML file 'Main.fxml'.";
+		assert searchAmountFromTextField != null : "fx:id=\"searchAmountFromTextField\" was not injected: check your FXML file 'Main.fxml'.";
+		assert searchAmountToTextField != null : "fx:id=\"searchAmountToTextField\" was not injected: check your FXML file 'Main.fxml'.";
+		assert searchDateToTextField != null : "fx:id=\"searchDateToTextField\" was not injected: check your FXML file 'Main.fxml'.";
+		assert addInvoiceButton != null : "fx:id=\"addInvoiceButton\" was not injected: check your FXML file 'Main.fxml'.";
+		assert invoiceListView != null : "fx:id=\"invoiceListView\" was not injected: check your FXML file 'Main.fxml'.";
+		assert searchContactButton != null : "fx:id=\"searchContactButton\" was not injected: check your FXML file 'Main.fxml'.";
 
 		super.initialize(url, resources);
 		contactListView.setItems(items);
@@ -57,7 +86,7 @@ public class MainController extends AbstractController {
 	@FXML
 	public void handleSearch() throws IOException {
 		List<ContactDto> contacts = ProxyFactory.createContactProxy()
-				.getContactBySearchString(searchKontaktTextField.getText());
+				.getContactBySearchString(searchContactTextField.getText());
 
 		items.clear();
 		items.addAll(contacts);
@@ -76,7 +105,8 @@ public class MainController extends AbstractController {
 		if (me.getClickCount() == 2) {
 			System.out.println("clicked on "
 					+ contactListView.getSelectionModel().getSelectedItem());
-			openContactInNewWindow(contactListView.getSelectionModel().getSelectedItem());
+			openContactInNewWindow(contactListView.getSelectionModel()
+					.getSelectedItem());
 		}
 	}
 

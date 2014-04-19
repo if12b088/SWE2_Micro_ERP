@@ -4,5 +4,5 @@ public class Constants {
 	public static final int PORT= 8088;
 	public static final String HOST = "localhost";
 	public static final String PATH = "/micro/";
-	public static final String SCHEME = "http";
+	public static final String SCHEME = "Http";
 }
