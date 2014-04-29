@@ -1,18 +1,17 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui;
 	
 import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
 
 
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = (Parent)FXMLLoader.load(getClass().getResource("main.fxml"));
+			Parent root = (Parent)FXMLLoader.load(getClass().getResource("view/Main.fxml"));
 			Scene scene = new Scene(root,800,600);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);

@@ -1,5 +1,8 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -7,47 +10,55 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.AddressDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.enums.AddressType;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Utils;
 
 public class ContactModel {
 
-	//Dto
+	// bool
+	private boolean hasShippingAddressBool = false;
+	private boolean hasInvoiceAddresssBool = false;
+
+	// Dto
 	ContactDto contactDto = new ContactDto();
 	AddressDto addressDto = new AddressDto();
 	AddressDto shippingAddressDto = new AddressDto();
 	AddressDto invoiceAddressDto = new AddressDto();
 	
-	//Company
+	//Invoices
+	List<InvoiceModel> invoiceses = new ArrayList<>();
+
+	// Company
 	private StringProperty companyName = new SimpleStringProperty();
 	private StringProperty uid = new SimpleStringProperty();
-	//Person
+	// Person
+	private StringProperty title = new SimpleStringProperty();
 	private StringProperty firstName = new SimpleStringProperty();
 	private StringProperty lastName = new SimpleStringProperty();
 	private StringProperty suffix = new SimpleStringProperty();
 	private StringProperty fkCompany = new SimpleStringProperty();
 	private StringProperty birthDate = new SimpleStringProperty();
-	//address
+	// address
 	private StringProperty addressAddress = new SimpleStringProperty();
 	private StringProperty addressZIP = new SimpleStringProperty();
 	private StringProperty addressCity = new SimpleStringProperty();
-	//Shippingaddress
+	// Shippingaddress
 	private StringProperty shippingAddressAddress = new SimpleStringProperty();
 	private StringProperty shippingAddressZIP = new SimpleStringProperty();
 	private StringProperty shippingAddressCity = new SimpleStringProperty();
-	//Invoiceaddress
+	// Invoiceaddress
 	private StringProperty invoiceAddressAddress = new SimpleStringProperty();
 	private StringProperty invoiceAddressZIP = new SimpleStringProperty();
 	private StringProperty invoiceAddressCity = new SimpleStringProperty();
-	
-	
+
 	private BooleanBinding isCompany = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
 			return !Utils.isNullOrEmpty(getCompanyName());
 		}
 	};
-	
+
 	private BooleanBinding disableEditPerson = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
@@ -65,8 +76,34 @@ public class ContactModel {
 							.isNullOrEmpty(getLastName()));
 		}
 	};
-	
-	//Constructor
+
+	private BooleanBinding hasShippingAddress = new BooleanBinding() {
+
+		@Override
+		protected boolean computeValue() {
+			if (hasShippingAddressBool) {
+				hasShippingAddressBool = false;
+			} else {
+				hasShippingAddressBool = true;
+			}
+			return hasShippingAddressBool;
+		}
+	};
+
+	private BooleanBinding hasInvoiceAddress = new BooleanBinding() {
+
+		@Override
+		protected boolean computeValue() {
+			if (hasInvoiceAddresssBool) {
+				hasInvoiceAddresssBool = false;
+			} else {
+				hasInvoiceAddresssBool = true;
+			}
+			return hasInvoiceAddresssBool;
+		}
+	};
+
+	// Constructor
 	public ContactModel() {
 		ChangeListener<String> canEditListener = new ChangeListener<String>() {
 			@Override
@@ -81,9 +118,9 @@ public class ContactModel {
 		firstName.addListener(canEditListener);
 		lastName.addListener(canEditListener);
 	}
-	
-	//Properties
-	//company
+
+	// Properties
+	// company
 	public final StringProperty companyNameProperty() {
 		return companyName;
 	}
@@ -91,7 +128,12 @@ public class ContactModel {
 	public final StringProperty UIDProperty() {
 		return uid;
 	}
-	//person
+
+	// person
+	public final StringProperty titleProperty() {
+		return title;
+	}
+	
 	public final StringProperty firstNameProperty() {
 		return firstName;
 	}
@@ -99,57 +141,60 @@ public class ContactModel {
 	public final StringProperty lastNameProperty() {
 		return lastName;
 	}
-	
+
 	public final StringProperty suffixProperty() {
 		return suffix;
 	}
-	
+
 	public final StringProperty fkCompanyProperty() {
 		return fkCompany;
 	}
-	
+
 	public final StringProperty birthDateProperty() {
 		return birthDate;
 	}
-	//address
+
+	// address
 	public final StringProperty addressAddressProperty() {
 		return addressAddress;
 	}
-	
+
 	public final StringProperty addressZIPProperty() {
 		return addressZIP;
 	}
-	
+
 	public final StringProperty addressCityProperty() {
 		return addressCity;
 	}
-	//shippingaddress
+
+	// shippingaddress
 	public final StringProperty shippingAddressAddressProperty() {
 		return shippingAddressAddress;
 	}
-	
+
 	public final StringProperty shippingAddressZIPProperty() {
 		return shippingAddressZIP;
 	}
-	
+
 	public final StringProperty shippingAddressCityProperty() {
 		return shippingAddressCity;
 	}
-	//invoiceAdrees
+
+	// invoiceAdrees
 	public final StringProperty invoiceAddressAddressProperty() {
 		return invoiceAddressAddress;
 	}
-	
+
 	public final StringProperty invoiveAddressZIPProperty() {
 		return invoiceAddressZIP;
 	}
-	
+
 	public final StringProperty invoiceAddressCityProperty() {
 		return invoiceAddressCity;
 	}
-	
-	//Getter and Setter
-	//company
+
+	// Getter and Setter
+	// company
 	public String getCompanyName() {
 		return companyName.get();
 	}
@@ -161,15 +206,19 @@ public class ContactModel {
 	public void setUid(String uID) {
 		uid.set(uID);
 	}
+
 	public String getFirstName() {
 		return firstName.get();
 	}
 
-	//person
+	// person
+	public void setTitle(String title) {
+		this.title.set(title);
+	}
+
 	public void setFirstName(String firstName) {
 		this.firstName.set(firstName);
 	}
-
 	public String getLastName() {
 		return lastName.get();
 	}
@@ -178,7 +227,7 @@ public class ContactModel {
 		this.lastName.set(lastName);
 	}
 
-	//other
+	// other
 	public boolean isCompany() {
 		return isCompany.get();
 	}
@@ -190,7 +239,15 @@ public class ContactModel {
 	public boolean disableEditCompany() {
 		return disableEditCompany.get();
 	}
-	
+
+	public boolean hasShippingAddress() {
+		return hasShippingAddress.get();
+	}
+
+	public boolean hasInvoiceAddress() {
+		return hasInvoiceAddress.get();
+	}
+
 	public BooleanBinding disableEditPersonBinding() {
 		return disableEditPerson;
 	}
@@ -198,81 +255,128 @@ public class ContactModel {
 	public BooleanBinding disableEditCompanyBinding() {
 		return disableEditCompany;
 	}
-	//get Dtos
-	public ContactDto getContactDto(){
+
+	public BooleanBinding hasShippingAddressBinding() {
+		return hasShippingAddress;
+	}
+
+	public BooleanBinding hasInvoiceAddressBinding() {
+		return hasInvoiceAddress;
+	}
+
+	// get Dtos
+	public ContactDto getContactDto() {
 		copyPropertiesToDto();
 		return contactDto;
 	}
-	
-	public AddressDto getAddressDto(){
+
+	public AddressDto getAddressDto() {
 		copyPropertiesToDto();
 		return addressDto;
 	}
 
-	public AddressDto getShippingAddressDto(){
+	public AddressDto getShippingAddressDto() {
 		copyPropertiesToDto();
 		return shippingAddressDto;
 	}
-	
-	public AddressDto getInvoiceAddressDto(){
+
+	public AddressDto getInvoiceAddressDto() {
 		copyPropertiesToDto();
 		return invoiceAddressDto;
 	}
-	
-	private void copyPropertiesToDto(){
+
+	private void copyPropertiesToDto() {
 		contactDto.setCompanyname(companyName.get());
 		contactDto.setUid(uid.get());
+		contactDto.setTitle(title.get());
 		contactDto.setFirstname(firstName.get());
 		contactDto.setLastname(lastName.get());
 		contactDto.setSuffix(suffix.get());
-	//	contactDto.setBirthday(birthDate.get());
-	//	contactDto.setCompanyId(fkCompany);
-		
+		// contactDto.setBirthday(birthDate.get());
+		// contactDto.setCompanyId(fkCompany);
+
 		addressDto.setStreet(addressAddress.get());
 		addressDto.setZip(addressZIP.get());
 		addressDto.setCity(addressCity.get());
-		
+
 		shippingAddressDto.setStreet(shippingAddressAddress.get());
 		shippingAddressDto.setZip(shippingAddressZIP.get());
 		shippingAddressDto.setCity(shippingAddressAddress.get());
-		
+
 		invoiceAddressDto.setStreet(invoiceAddressAddress.get());
 		invoiceAddressDto.setZip(invoiceAddressZIP.get());
 		invoiceAddressDto.setCity(invoiceAddressCity.get());
 	}
-	
-	private void copyDtoToProperties(){
-		companyNameProperty().set(contactDto.getCompanyname());
-		UIDProperty().set(contactDto.getUid());
-		firstNameProperty().set(contactDto.getFirstname());
-		lastNameProperty().set(contactDto.getLastname());
-		suffixProperty().set(contactDto.getSuffix());
-		
-		//Address
-		if(contactDto.getAddresses().containsKey(AddressType.PRIMARY)){
-			AddressDto addressDto = contactDto.getAddresses().get(AddressType.PRIMARY);
-			addressAddressProperty().set(addressDto.getStreet());
-			addressZIPProperty().set(addressDto.getZip());
-			addressCityProperty().set(addressDto.getCity());
+
+	private void copyDtoToProperties() {
+		companyName.set(contactDto.getCompanyname());
+		uid.set(contactDto.getUid());
+		title.set(contactDto.getTitle());
+		firstName.set(contactDto.getFirstname());
+		lastName.set(contactDto.getLastname());
+		suffix.set(contactDto.getSuffix());
+
+		// Address
+		if (contactDto.getAddresses().containsKey(AddressType.PRIMARY)) {
+			AddressDto addressDto = contactDto.getAddresses().get(
+					AddressType.PRIMARY);
+			addressAddress.set(addressDto.getStreet());
+			addressZIP.set(addressDto.getZip());
+			addressCity.set(addressDto.getCity());
 		}
-		//Shipping Address
-		if(contactDto.getAddresses().containsKey(AddressType.SHIPPING)){
-			AddressDto addressDto = contactDto.getAddresses().get(AddressType.SHIPPING);
-			shippingAddressAddressProperty().set(addressDto.getStreet());
-			shippingAddressZIPProperty().set(addressDto.getZip());
-			shippingAddressCityProperty().set(addressDto.getCity());
+		// Shipping Address
+		if (contactDto.getAddresses().containsKey(AddressType.SHIPPING)) {
+			AddressDto addressDto = contactDto.getAddresses().get(
+					AddressType.SHIPPING);
+			shippingAddressAddress.set(addressDto.getStreet());
+			shippingAddressZIP.set(addressDto.getZip());
+			shippingAddressCity.set(addressDto.getCity());
 		}
-		//Invoice Address
-		if(contactDto.getAddresses().containsKey(AddressType.INVOICE)){
-			AddressDto addressDto = contactDto.getAddresses().get(AddressType.INVOICE);
-			invoiceAddressAddressProperty().set(addressDto.getStreet());
-			invoiveAddressZIPProperty().set(addressDto.getZip());
-			invoiceAddressCityProperty().set(addressDto.getCity());
+		// Invoice Address
+		if (contactDto.getAddresses().containsKey(AddressType.INVOICE)) {
+			AddressDto addressDto = contactDto.getAddresses().get(
+					AddressType.INVOICE);
+			invoiceAddressAddress.set(addressDto.getStreet());
+			invoiceAddressZIP.set(addressDto.getZip());
+			invoiceAddressCity.set(addressDto.getCity());
 		}
 	}
 
 	public void setDto(ContactDto dto) {
 		contactDto = dto;
 		copyDtoToProperties();
+	}
+	
+	public void setInvoices(List<InvoiceModel> invoices){
+		this.invoiceses = invoices;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		if (companyName.get() != null) {
+			sb.append(companyName.get());
+			sb.append(" ");
+		}
+		if (uid.get() != null) {
+			sb.append(uid.get());
+			sb.append(" ");
+		}
+		if (title.get() != null) {
+			sb.append(title.get());
+			sb.append(" ");
+		}
+		if (firstName.get() != null) {
+			sb.append(firstName.get());
+			sb.append(" ");
+		}
+		if (lastName.get() != null) {
+			sb.append(lastName.get());
+		}
+		if (suffix.get() != null) {
+			sb.append(suffix.get());
+			sb.append(" ");
+		}
+		return sb.toString();
 	}
 }

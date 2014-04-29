@@ -1,7 +1,8 @@
-package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui;
+package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -16,6 +17,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 
 public class MainController extends AbstractController {
@@ -24,7 +27,7 @@ public class MainController extends AbstractController {
     private TextField searchDateFromTextField; // Value injected by FXMLLoader
 
     @FXML // fx:id="contactListView"
-    private ListView<ContactDto> contactListView; // Value injected by FXMLLoader
+    private ListView<ContactModel> contactListView; // Value injected by FXMLLoader
 
     @FXML // fx:id="searchInvoiceButton"
     private Button searchInvoiceButton; // Value injected by FXMLLoader
@@ -56,7 +59,7 @@ public class MainController extends AbstractController {
     @FXML // fx:id="searchContactButton"
     private Button searchContactButton; // Value injected by FXMLLoader
 
-	ObservableList<ContactDto> items = FXCollections.observableArrayList();
+	ObservableList<ContactModel> items = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL url, ResourceBundle resources) {
@@ -80,23 +83,35 @@ public class MainController extends AbstractController {
 
 	@FXML
 	public void handleNewContact() throws IOException {
-		openContactInNewWindow(new ContactDto());
+		openContactInNewWindow(new ContactModel());
 	}
 
 	@FXML
-	public void handleSearch() throws IOException {
+	public void handleSearchContact() throws IOException {
 		List<ContactDto> contacts = ProxyFactory.createContactProxy()
 				.getContactBySearchString(searchContactTextField.getText());
 
+		List<ContactModel> contactModels = new ArrayList<>();
+		for (ContactDto cDto : contacts) {
+			ContactModel cModel = new ContactModel(); 
+			cModel.setDto(cDto);
+			contactModels.add(cModel);
+		}
+		
 		items.clear();
-		items.addAll(contacts);
+		items.addAll(contactModels);
 		System.out.println("search");
+	}
+	
+	@FXML
+	public void handleSearchInvoice() throws IOException {
+		//todo
 	}
 
 	@FXML
 	public void handleEnter(KeyEvent ke) throws IOException {
 		if (ke.getCode().equals(KeyCode.ENTER)) {
-			handleSearch();
+			handleSearchContact();
 		}
 	}
 
@@ -109,5 +124,11 @@ public class MainController extends AbstractController {
 					.getSelectedItem());
 		}
 	}
+	
+	@FXML
+	public void handleNewInvoice(){
+		openInvoiceInNewWindow(new InvoiceModel());
+	}
+	
 
 }

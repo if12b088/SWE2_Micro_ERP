@@ -19,8 +19,11 @@ import org.apache.http.message.BasicNameValuePair;
 
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.Uris;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Constants;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.UserWasNotCreatedException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.IContactProxy;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.request.CreateContactRequest;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.request.GetContactsBySearchstringRequest;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.response.GetContactsBySearchstringResponse;
 
@@ -71,6 +74,18 @@ public class ContactWebService implements IContactProxy {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	@Override
+	public void createContact(CreateContactRequest create) throws UserWasNotCreatedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<InvoiceDto> getInvoiceByContactId(int id) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
