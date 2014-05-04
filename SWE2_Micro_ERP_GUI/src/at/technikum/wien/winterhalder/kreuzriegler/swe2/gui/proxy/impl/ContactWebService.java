@@ -21,9 +21,9 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.Uris;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Constants;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.UserWasNotCreatedException;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ContactWasNotCreatedOrUpdatedException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.IContactProxy;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.request.CreateContactRequest;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.request.CreateOrUpdateContactRequest;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.request.GetContactsBySearchstringRequest;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.response.GetContactsBySearchstringResponse;
 
@@ -32,7 +32,32 @@ import com.google.gson.Gson;
 public class ContactWebService implements IContactProxy {
 
 	@Override
-	public List<ContactDto> getContactBySearchString(String search) {
+	public boolean createOrUpdateContact(ContactDto dto)
+			throws ContactWasNotCreatedOrUpdatedException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<ContactDto> getCompanysByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ContactDto> getContactById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ContactDto> getContactsByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public List<ContactDto> getContactsBySearchString(String search) {
 		try {
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpPost post;
@@ -76,17 +101,4 @@ public class ContactWebService implements IContactProxy {
 		}
 		return null;
 	}
-
-	@Override
-	public void createContact(CreateContactRequest create) throws UserWasNotCreatedException {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public List<InvoiceDto> getInvoiceByContactId(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

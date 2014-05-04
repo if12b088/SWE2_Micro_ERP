@@ -37,8 +37,8 @@ public class CustomControl extends HBox {
 //		Image i = new Image("ok.png");
 //		customImgaeView.setImage(i);
 		
-		//customButtonSearch.setText("Search");
-		//customButtonRemove.setText("Remove");
+	//	customButtonSearch.setText("Search");
+	//	customButtonRemove.setText("Remove");
 
 		try {
 			fxmlLoader.load();

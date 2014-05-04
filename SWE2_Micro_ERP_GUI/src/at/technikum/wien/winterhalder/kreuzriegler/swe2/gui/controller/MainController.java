@@ -89,7 +89,7 @@ public class MainController extends AbstractController {
 	@FXML
 	public void handleSearchContact() throws IOException {
 		List<ContactDto> contacts = ProxyFactory.createContactProxy()
-				.getContactBySearchString(searchContactTextField.getText());
+				.getContactsBySearchString(searchContactTextField.getText());
 
 		List<ContactModel> contactModels = new ArrayList<>();
 		for (ContactDto cDto : contacts) {

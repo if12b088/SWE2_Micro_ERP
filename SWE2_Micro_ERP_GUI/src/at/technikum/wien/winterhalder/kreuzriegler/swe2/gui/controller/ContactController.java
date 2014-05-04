@@ -22,7 +22,7 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.Custom
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.request.CreateContactRequest;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.request.CreateOrUpdateContactRequest;
 
 public class ContactController extends AbstractController {
 
@@ -158,14 +158,13 @@ public class ContactController extends AbstractController {
 	@FXML
 	private void onSave(ActionEvent event) {
 		ContactDto cDto = model.getContactDto();
-		CreateContactRequest create = new CreateContactRequest();
 		
 		System.out.println("saveBtn");
 	}
 	
 	@FXML
 	private void loadInvoices(){
-		List<InvoiceDto> invoiceDtos = ProxyFactory.createContactProxy().getInvoiceByContactId(1);
+		List<InvoiceDto> invoiceDtos = ProxyFactory.createInvoiceProxy().getInvoicesByContactId(1);
 		
 		for(InvoiceDto dto : invoiceDtos){
 			InvoiceModel IModel = new InvoiceModel();
