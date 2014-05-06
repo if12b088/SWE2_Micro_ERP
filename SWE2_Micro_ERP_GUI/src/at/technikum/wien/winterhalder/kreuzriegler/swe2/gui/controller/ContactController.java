@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -19,6 +20,8 @@ import javafx.scene.layout.HBox;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.CustomControl;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ContactWasNotCreatedOrUpdatedException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
@@ -26,10 +29,10 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.request.CreateOrUpdateCo
 
 public class ContactController extends AbstractController {
 
-	//tabs	
+	// tabs
 	@FXML
 	private TabPane tabs;
-	@FXML 
+	@FXML
 	private Tab basisdaten;
 	@FXML
 	private Tab rechnungen;
@@ -61,11 +64,11 @@ public class ContactController extends AbstractController {
 	private TextField lastName;
 	@FXML
 	private TextField suffix;
-//	@FXML
-//	private TextField fkCompany;
+	// @FXML
+	// private TextField fkCompany;
 	@FXML
 	private HBox customHbox;
-	
+
 	@FXML
 	private TextField birthday;
 
@@ -94,7 +97,9 @@ public class ContactController extends AbstractController {
 	private TextField invoiceAddressCity;
 	@FXML
 	private Button saveBtn;
-	
+	@FXML
+	private Label errMsg;
+
 	// Invoice
 	@FXML
 	private ListView<InvoiceModel> invoiceListView;
@@ -106,22 +111,23 @@ public class ContactController extends AbstractController {
 		setModel(new ContactModel());
 	}
 
-//	public void setDto(ContactDto dto) {
-//		model.setDto(dto);
-//	}
-	
+	// public void setDto(ContactDto dto) {
+	// model.setDto(dto);
+	// }
+
 	ObservableList<InvoiceModel> invoices = FXCollections.observableArrayList();
-	
-	public void setModel(ContactModel model){
+
+	public void setModel(ContactModel model) {
 		this.model = model;
-		
+
 		personPane.disableProperty().bind(model.disableEditPersonBinding());
 		companyPane.disableProperty().bind(model.disableEditCompanyBinding());
 
-//		 shippingAddressPane.expandedProperty().bind(model.hasShippingAddressBinding());
-//		 invoiceAddressPane.expandedProperty().bind(model.hasInvoiceAddressBinding());
-//	     shippingAddressPane.expandedProperty().bindBidirectional((Property<Boolean>) model.hasShippingAddressBinding());
-		
+		// shippingAddressPane.expandedProperty().bind(model.hasShippingAddressBinding());
+		// invoiceAddressPane.expandedProperty().bind(model.hasInvoiceAddressBinding());
+		// shippingAddressPane.expandedProperty().bindBidirectional((Property<Boolean>)
+		// model.hasShippingAddressBinding());
+
 		companyName.textProperty().bindBidirectional(
 				model.companyNameProperty());
 		UID.textProperty().bindBidirectional(model.UIDProperty());
@@ -130,7 +136,7 @@ public class ContactController extends AbstractController {
 		lastName.textProperty().bindBidirectional(model.lastNameProperty());
 		suffix.textProperty().bindBidirectional(model.suffixProperty());
 		birthday.textProperty().bindBidirectional(model.birthDateProperty());
-	//	fkCompany.textProperty().bindBidirectional(model.fkCompanyProperty());
+		// fkCompany.textProperty().bindBidirectional(model.fkCompanyProperty());
 
 		addressAddress.textProperty().bindBidirectional(
 				model.addressAddressProperty());
@@ -151,33 +157,43 @@ public class ContactController extends AbstractController {
 				model.invoiveAddressZIPProperty());
 		invoiceAddressCity.textProperty().bindBidirectional(
 				model.invoiceAddressCityProperty());
-		
+
 		invoiceListView.setItems(invoices);
 	}
 
 	@FXML
-	private void onSave(ActionEvent event) {
+	private void onSaveContact(ActionEvent event) {
 		ContactDto cDto = model.getContactDto();
-		
-		System.out.println("saveBtn");
-	}
-	
-	@FXML
-	private void loadInvoices(){
-		List<InvoiceDto> invoiceDtos = ProxyFactory.createInvoiceProxy().getInvoicesByContactId(1);
-		
-		for(InvoiceDto dto : invoiceDtos){
-			InvoiceModel IModel = new InvoiceModel();
-			IModel.setDto(dto);
-			invoices.add(IModel);
+
+		try {
+			ProxyFactory.createContactProxy().createOrUpdateContact(cDto);
+		} catch (ConnectionProblemException
+				| ContactWasNotCreatedOrUpdatedException e) {
+			errMsg.setText(e.getMessage());
 		}
-		
-		
-		model.setInvoices(invoices);
-		
-		System.out.println("Tabed");
 	}
-	
+
+	@FXML
+	private void loadInvoices() {
+		List<InvoiceDto> invoiceDtos = null;
+		try {
+			invoiceDtos = ProxyFactory.createInvoiceProxy()
+					.getInvoicesByContactId(1);
+		} catch (ConnectionProblemException e) {
+			errMsg.setText(e.getMessage());
+		}
+
+		if (invoiceDtos != null) {
+			for (InvoiceDto dto : invoiceDtos) {
+				InvoiceModel IModel = new InvoiceModel();
+				IModel.setDto(dto);
+				invoices.add(IModel);
+			}
+			model.setInvoices(invoices);
+		}
+
+	}
+
 	@FXML
 	public void handleDblClick(MouseEvent me) {
 		if (me.getClickCount() == 2) {

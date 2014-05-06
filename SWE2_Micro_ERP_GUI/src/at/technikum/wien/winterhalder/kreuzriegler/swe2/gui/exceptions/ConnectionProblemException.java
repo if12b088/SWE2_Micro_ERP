@@ -1,11 +1,11 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions;
 
-public class ContactWasNotCreatedOrUpdatedException extends WasNotCreatedOrUpatedException {
+public class ConnectionProblemException extends Exception{
 
 	/**
 	 * 
 	 */
-	public ContactWasNotCreatedOrUpdatedException() {
+	public ConnectionProblemException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -13,9 +13,9 @@ public class ContactWasNotCreatedOrUpdatedException extends WasNotCreatedOrUpate
 	/**
 	 * @param message
 	 */
-	public ContactWasNotCreatedOrUpdatedException(String message) {
+	public ConnectionProblemException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 }

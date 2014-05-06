@@ -10,6 +10,6 @@
 	<ImageView fx:id="customImgaeView">
 	</ImageView>
 	<TextField fx:id="customTextField" />
-	<Button fx:id="customButtonSearch"></Button>
-	<Button fx:id="customButtonRemove"></Button>
+	<Button fx:id="customButtonSearch" text="Suchen"></Button>
+	<Button fx:id="customButtonRemove" text="X""></Button>
 </fx:root>

@@ -92,8 +92,9 @@
 				</TitledPane>
 				<AnchorPane prefHeight="40.0">
 					<children>
+					<Label fx:id="errMsg" layoutX="40.353271484375" layoutY="376.0" textFill="#f50a0a" />
 						<Button layoutX="400.0" layoutY="7.0" mnemonicParsing="false" text="Abbrechen" />
-						<Button fx:id="saveBtn" layoutX="500.0" layoutY="7.0" mnemonicParsing="false" onAction="#onSave" text="Speichern" />
+						<Button fx:id="saveBtn" layoutX="500.0" layoutY="7.0" mnemonicParsing="false" onAction="#onSaveContact" text="Speichern" />
 					</children>
 				</AnchorPane>
 			</children>

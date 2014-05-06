@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -111,6 +112,12 @@ public class InvoiceController {
 	@FXML
 	// fx:id="invoiceRowUst"
 	private TextField invoiceRowUst; // Value injected by FXMLLoader
+	
+	@FXML
+    private Button saveInvoice;
+
+	@FXML
+	private Label errMsg;
 
 	private InvoiceModel model;
 

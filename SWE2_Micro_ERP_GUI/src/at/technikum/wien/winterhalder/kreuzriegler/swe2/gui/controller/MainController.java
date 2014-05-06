@@ -10,56 +10,81 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 
 public class MainController extends AbstractController {
 
-    @FXML // fx:id="searchDateFromTextField"
-    private TextField searchDateFromTextField; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="searchDateFromTextField"
+	private TextField searchDateFromTextField; // Value injected by FXMLLoader
 
-    @FXML // fx:id="contactListView"
-    private ListView<ContactModel> contactListView; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="contactListView"
+	private ListView<ContactModel> contactListView; // Value injected by
+													// FXMLLoader
 
-    @FXML // fx:id="searchInvoiceButton"
-    private Button searchInvoiceButton; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="searchInvoiceButton"
+	private Button searchInvoiceButton; // Value injected by FXMLLoader
 
-    @FXML // fx:id="addContactButton"
-    private Button addContactButton; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="addContactButton"
+	private Button addContactButton; // Value injected by FXMLLoader
 
-    @FXML // fx:id="searchContactTextField"
-    private TextField searchContactTextField; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="searchContactTextField"
+	private TextField searchContactTextField; // Value injected by FXMLLoader
 
-    @FXML // fx:id="searchInvoiceTextField"
-    private TextField searchInvoiceTextField; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="searchInvoiceTextField"
+	private TextField searchInvoiceTextField; // Value injected by FXMLLoader
 
-    @FXML // fx:id="searchAmountFromTextField"
-    private TextField searchAmountFromTextField; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="searchAmountFromTextField"
+	private TextField searchAmountFromTextField; // Value injected by FXMLLoader
 
-    @FXML // fx:id="searchAmountToTextField"
-    private TextField searchAmountToTextField; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="searchAmountToTextField"
+	private TextField searchAmountToTextField; // Value injected by FXMLLoader
 
-    @FXML // fx:id="searchDateToTextField"
-    private TextField searchDateToTextField; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="searchDateToTextField"
+	private TextField searchDateToTextField; // Value injected by FXMLLoader
 
-    @FXML // fx:id="addInvoiceButton"
-    private Button addInvoiceButton; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="addInvoiceButton"
+	private Button addInvoiceButton; // Value injected by FXMLLoader
 
-    @FXML // fx:id="invoiceListView"
-    private ListView<?> invoiceListView; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="invoiceListView"
+	private ListView<InvoiceModel> invoiceListView; // Value injected by
+													// FXMLLoader
 
-    @FXML // fx:id="searchContactButton"
-    private Button searchContactButton; // Value injected by FXMLLoader
+	@FXML
+	// fx:id="searchContactButton"
+	private Button searchContactButton; // Value injected by FXMLLoader
 
-	ObservableList<ContactModel> items = FXCollections.observableArrayList();
+	@FXML
+	private Label contactErrMsg;
+	
+	@FXML
+	private Label invoiceErrMsg;
+
+	ObservableList<ContactModel> contactItems = FXCollections
+			.observableArrayList();
+	ObservableList<InvoiceModel> invoiceItems = FXCollections
+			.observableArrayList();
 
 	@Override
 	public void initialize(URL url, ResourceBundle resources) {
@@ -78,7 +103,8 @@ public class MainController extends AbstractController {
 		assert searchContactButton != null : "fx:id=\"searchContactButton\" was not injected: check your FXML file 'Main.fxml'.";
 
 		super.initialize(url, resources);
-		contactListView.setItems(items);
+		contactListView.setItems(contactItems);
+		invoiceListView.setItems(invoiceItems);
 	}
 
 	@FXML
@@ -88,30 +114,70 @@ public class MainController extends AbstractController {
 
 	@FXML
 	public void handleSearchContact() throws IOException {
-		List<ContactDto> contacts = ProxyFactory.createContactProxy()
-				.getContactsBySearchString(searchContactTextField.getText());
-
-		List<ContactModel> contactModels = new ArrayList<>();
-		for (ContactDto cDto : contacts) {
-			ContactModel cModel = new ContactModel(); 
-			cModel.setDto(cDto);
-			contactModels.add(cModel);
+		List<ContactDto> contacts = null;
+		try {
+			contacts = ProxyFactory
+					.createContactProxy()
+					.getContactsBySearchString(searchContactTextField.getText());
+		} catch (ConnectionProblemException e) {
+			contactErrMsg.setText(e.getMessage());
 		}
-		
-		items.clear();
-		items.addAll(contactModels);
-		System.out.println("search");
+
+		if (contacts != null) {
+			List<ContactModel> contactModels = new ArrayList<>();
+
+			for (ContactDto cDto : contacts) {
+				ContactModel cModel = new ContactModel();
+				cModel.setDto(cDto);
+				contactModels.add(cModel);
+			}
+
+			contactItems.clear();
+			contactItems.addAll(contactModels);
+			System.out.println("search");
+		}
 	}
-	
+
 	@FXML
 	public void handleSearchInvoice() throws IOException {
-		//todo
+		List<InvoiceDto> invoices = null;
+		try {
+			invoices = ProxyFactory.createInvoiceProxy()
+					.getInvoicesBySearchstring(
+							searchInvoiceTextField.getText(),
+							searchDateFromTextField.getText() + "-"
+									+ searchDateToTextField.getText(),
+							searchAmountFromTextField.getText() + "-"
+									+ searchAmountToTextField.getText());
+		} catch (ConnectionProblemException e) {
+			invoiceErrMsg.setText(e.getMessage());
+		}
+
+		if (invoices != null) {
+			List<InvoiceModel> invoiceModels = new ArrayList<>();
+
+			for (InvoiceDto iDto : invoices) {
+				InvoiceModel iModel = new InvoiceModel();
+				iModel.setDto(iDto);
+				invoiceModels.add(iModel);
+			}
+		invoiceItems.clear();
+		invoiceItems.addAll(invoiceModels);
+		}
 	}
 
 	@FXML
 	public void handleEnter(KeyEvent ke) throws IOException {
 		if (ke.getCode().equals(KeyCode.ENTER)) {
-			handleSearchContact();
+			if (searchContactTextField.isFocused()) {
+				handleSearchContact();
+			} else if (searchInvoiceTextField.isFocused()
+					|| searchDateFromTextField.isFocused()
+					|| searchDateToTextField.isFocused()
+					|| searchAmountFromTextField.isFocused()
+					|| searchAmountToTextField.isFocused()) {
+				handleSearchInvoice();
+			}
 		}
 	}
 
@@ -120,15 +186,25 @@ public class MainController extends AbstractController {
 		if (me.getClickCount() == 2) {
 			System.out.println("clicked on "
 					+ contactListView.getSelectionModel().getSelectedItem());
-			openContactInNewWindow(contactListView.getSelectionModel()
-					.getSelectedItem());
+			System.out.println("clicked on "
+					+ invoiceListView.getSelectionModel().getSelectedItem());
+			if (contactListView.getSelectionModel().getSelectedItem() != null) {
+				openContactInNewWindow(contactListView.getSelectionModel()
+						.getSelectedItem());
+			}
+			if (invoiceListView.getSelectionModel().getSelectedItem() != null) {
+				openInvoiceInNewWindow(invoiceListView.getSelectionModel()
+						.getSelectedItem());
+			}
+
+			contactListView.getSelectionModel().clearSelection();
+			invoiceListView.getSelectionModel().clearSelection();
 		}
 	}
-	
+
 	@FXML
-	public void handleNewInvoice(){
+	public void handleNewInvoice() {
 		openInvoiceInNewWindow(new InvoiceModel());
 	}
-	
 
 }
