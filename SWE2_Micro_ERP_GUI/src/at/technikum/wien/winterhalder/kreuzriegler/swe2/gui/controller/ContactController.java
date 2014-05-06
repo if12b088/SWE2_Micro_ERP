@@ -132,6 +132,7 @@ public class ContactController extends AbstractController {
 				model.companyNameProperty());
 		UID.textProperty().bindBidirectional(model.UIDProperty());
 
+		title.textProperty().bindBidirectional(model.titleProperty());
 		firstName.textProperty().bindBidirectional(model.firstNameProperty());
 		lastName.textProperty().bindBidirectional(model.lastNameProperty());
 		suffix.textProperty().bindBidirectional(model.suffixProperty());

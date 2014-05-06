@@ -25,8 +25,8 @@ public class ContactModel {
 	AddressDto addressDto = new AddressDto();
 	AddressDto shippingAddressDto = new AddressDto();
 	AddressDto invoiceAddressDto = new AddressDto();
-	
-	//Invoices
+
+	// Invoices
 	List<InvoiceModel> invoiceses = new ArrayList<>();
 
 	// Company
@@ -73,7 +73,8 @@ public class ContactModel {
 		protected boolean computeValue() {
 			return Utils.isNullOrEmpty(getCompanyName())
 					&& (!Utils.isNullOrEmpty(getFirstName()) || !Utils
-							.isNullOrEmpty(getLastName()));
+							.isNullOrEmpty(getLastName()) || !Utils
+							.isNullOrEmpty(getTitle()));
 		}
 	};
 
@@ -114,6 +115,7 @@ public class ContactModel {
 				disableEditCompany.invalidate();
 			}
 		};
+		title.addListener(canEditListener);
 		companyName.addListener(canEditListener);
 		firstName.addListener(canEditListener);
 		lastName.addListener(canEditListener);
@@ -133,7 +135,7 @@ public class ContactModel {
 	public final StringProperty titleProperty() {
 		return title;
 	}
-	
+
 	public final StringProperty firstNameProperty() {
 		return firstName;
 	}
@@ -207,25 +209,32 @@ public class ContactModel {
 		uid.set(uID);
 	}
 
-	public String getFirstName() {
-		return firstName.get();
-	}
 
 	// person
 	public void setTitle(String title) {
 		this.title.set(title);
 	}
+	
+	public String getTitle() {
+		return title.get();
+	}
 
 	public void setFirstName(String firstName) {
 		this.firstName.set(firstName);
 	}
-	public String getLastName() {
-		return lastName.get();
+
+	public String getFirstName() {
+		return firstName.get();
 	}
 
 	public void setLastName(String lastName) {
 		this.lastName.set(lastName);
 	}
+
+	public String getLastName() {
+		return lastName.get();
+	}
+
 
 	// other
 	public boolean isCompany() {
@@ -295,21 +304,37 @@ public class ContactModel {
 		// contactDto.setBirthday(birthDate.get());
 		// contactDto.setCompanyId(fkCompany);
 
+		addressDto.setType(AddressType.PRIMARY);
 		addressDto.setStreet(addressAddress.get());
 		addressDto.setZip(addressZIP.get());
 		addressDto.setCity(addressCity.get());
 
+		shippingAddressDto.setType(AddressType.SHIPPING);
 		shippingAddressDto.setStreet(shippingAddressAddress.get());
 		shippingAddressDto.setZip(shippingAddressZIP.get());
 		shippingAddressDto.setCity(shippingAddressAddress.get());
 
+		invoiceAddressDto.setType(AddressType.INVOICE);
 		invoiceAddressDto.setStreet(invoiceAddressAddress.get());
 		invoiceAddressDto.setZip(invoiceAddressZIP.get());
 		invoiceAddressDto.setCity(invoiceAddressCity.get());
-		
-		contactDto.getAddresses().put(AddressType.PRIMARY, addressDto);
-		contactDto.getAddresses().put(AddressType.SHIPPING, shippingAddressDto);
-		contactDto.getAddresses().put(AddressType.INVOICE, invoiceAddressDto);
+
+		if (addressAddress.get() != null && addressZIP.get() != null
+				&& addressCity.get() != null) {
+			contactDto.getAddresses().put(AddressType.PRIMARY, addressDto);
+		}
+
+		if (shippingAddressAddress.get() != null
+				&& shippingAddressZIP.get() != null
+				&& shippingAddressCity.get() != null) {
+			contactDto.getAddresses().put(AddressType.SHIPPING,
+					shippingAddressDto);
+		}
+		if (invoiceAddressAddress.get() != null && invoiceAddressZIP.get() != null
+				&& invoiceAddressCity.get() != "") {
+			contactDto.getAddresses().put(AddressType.INVOICE,
+					invoiceAddressDto);
+		}
 	}
 
 	private void copyDtoToProperties() {
@@ -350,8 +375,8 @@ public class ContactModel {
 		contactDto = dto;
 		copyDtoToProperties();
 	}
-	
-	public void setInvoices(List<InvoiceModel> invoices){
+
+	public void setInvoices(List<InvoiceModel> invoices) {
 		this.invoiceses = invoices;
 	}
 
