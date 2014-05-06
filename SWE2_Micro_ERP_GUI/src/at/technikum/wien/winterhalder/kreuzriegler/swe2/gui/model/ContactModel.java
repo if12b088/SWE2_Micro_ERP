@@ -10,7 +10,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.AddressDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.enums.AddressType;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Utils;
 
@@ -72,9 +71,9 @@ public class ContactModel {
 		@Override
 		protected boolean computeValue() {
 			return Utils.isNullOrEmpty(getCompanyName())
-					&& (!Utils.isNullOrEmpty(getFirstName()) || !Utils
-							.isNullOrEmpty(getLastName()) || !Utils
-							.isNullOrEmpty(getTitle()));
+					&& (!Utils.isNullOrEmpty(getFirstName())
+							|| !Utils.isNullOrEmpty(getLastName()) || !Utils
+								.isNullOrEmpty(getTitle()));
 		}
 	};
 
@@ -209,12 +208,11 @@ public class ContactModel {
 		uid.set(uID);
 	}
 
-
 	// person
 	public void setTitle(String title) {
 		this.title.set(title);
 	}
-	
+
 	public String getTitle() {
 		return title.get();
 	}
@@ -234,7 +232,6 @@ public class ContactModel {
 	public String getLastName() {
 		return lastName.get();
 	}
-
 
 	// other
 	public boolean isCompany() {
@@ -304,37 +301,48 @@ public class ContactModel {
 		// contactDto.setBirthday(birthDate.get());
 		// contactDto.setCompanyId(fkCompany);
 
+		if (contactDto.getAddresses().containsKey(AddressType.PRIMARY)) {
+			addressDto = contactDto.getAddresses().get(AddressType.PRIMARY);
+		} else if (addressAddress.get() != null && addressZIP.get() != null
+				&& addressCity.get() != null) {
+			contactDto.getAddresses().put(AddressType.PRIMARY, addressDto);
+		}
+
 		addressDto.setType(AddressType.PRIMARY);
 		addressDto.setStreet(addressAddress.get());
 		addressDto.setZip(addressZIP.get());
 		addressDto.setCity(addressCity.get());
+
+		if (contactDto.getAddresses().containsKey(AddressType.SHIPPING)) {
+			shippingAddressDto = contactDto.getAddresses().get(
+					AddressType.SHIPPING);
+		} else if (shippingAddressAddress.get() != null
+				&& shippingAddressZIP.get() != null
+				&& shippingAddressCity.get() != null) {
+			contactDto.getAddresses().put(AddressType.SHIPPING,
+					shippingAddressDto);
+		}
 
 		shippingAddressDto.setType(AddressType.SHIPPING);
 		shippingAddressDto.setStreet(shippingAddressAddress.get());
 		shippingAddressDto.setZip(shippingAddressZIP.get());
 		shippingAddressDto.setCity(shippingAddressAddress.get());
 
+		if (contactDto.getAddresses().containsKey(AddressType.INVOICE)) {
+			invoiceAddressDto = contactDto.getAddresses().get(
+					AddressType.INVOICE);
+		} else if (invoiceAddressAddress.get() != null
+				&& invoiceAddressZIP.get() != null
+				&& invoiceAddressCity.get() != "") {
+			contactDto.getAddresses().put(AddressType.INVOICE,
+					invoiceAddressDto);
+		}
+
 		invoiceAddressDto.setType(AddressType.INVOICE);
 		invoiceAddressDto.setStreet(invoiceAddressAddress.get());
 		invoiceAddressDto.setZip(invoiceAddressZIP.get());
 		invoiceAddressDto.setCity(invoiceAddressCity.get());
 
-		if (addressAddress.get() != null && addressZIP.get() != null
-				&& addressCity.get() != null) {
-			contactDto.getAddresses().put(AddressType.PRIMARY, addressDto);
-		}
-
-		if (shippingAddressAddress.get() != null
-				&& shippingAddressZIP.get() != null
-				&& shippingAddressCity.get() != null) {
-			contactDto.getAddresses().put(AddressType.SHIPPING,
-					shippingAddressDto);
-		}
-		if (invoiceAddressAddress.get() != null && invoiceAddressZIP.get() != null
-				&& invoiceAddressCity.get() != "") {
-			contactDto.getAddresses().put(AddressType.INVOICE,
-					invoiceAddressDto);
-		}
 	}
 
 	private void copyDtoToProperties() {
