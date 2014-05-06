@@ -306,6 +306,10 @@ public class ContactModel {
 		invoiceAddressDto.setStreet(invoiceAddressAddress.get());
 		invoiceAddressDto.setZip(invoiceAddressZIP.get());
 		invoiceAddressDto.setCity(invoiceAddressCity.get());
+		
+		contactDto.getAddresses().put(AddressType.PRIMARY, addressDto);
+		contactDto.getAddresses().put(AddressType.SHIPPING, shippingAddressDto);
+		contactDto.getAddresses().put(AddressType.INVOICE, invoiceAddressDto);
 	}
 
 	private void copyDtoToProperties() {
