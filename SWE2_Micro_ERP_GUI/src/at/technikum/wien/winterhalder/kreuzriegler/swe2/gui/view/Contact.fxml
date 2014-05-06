@@ -3,12 +3,14 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.CustomControl?>
+<?import javafx.scene.layout.HBox?>
 
 <ScrollPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller.ContactController">
 	<content>
-	<TabPane prefWidth="598.0" tabClosingPolicy="UNAVAILABLE">
+	<TabPane fx:id="tabs" prefWidth="598.0" tabClosingPolicy="UNAVAILABLE">
   <tabs>
-    <Tab text="Basisdaten">
+    <Tab fx:id="basisdaten" text="Basisdaten">
       <content>
        		<VBox>
 			<children>
@@ -24,23 +26,24 @@
 						</AnchorPane>
 					</content>
 				</TitledPane>
-				<TitledPane fx:id="personPane" animated="false" maxHeight="220.0" text="Person">
+				<TitledPane fx:id="personPane" animated="false" maxHeight="240.0" text="Person">
 					<content>
-						<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+						<AnchorPane minHeight="0.0" minWidth="0.0">
 							<children>
-								<Label layoutX="25.0" layoutY="44.0" text="Vorname" />
-								<Label layoutX="25.0" layoutY="84.0" text="Nachname" />
-								<Label layoutX="25.0" layoutY="124.0" text="Suffix" />
-								<Label layoutX="25.0" layoutY="164.0" text="Geburtstag" />
-								<TextField fx:id="firstName" layoutX="100.0" layoutY="39.0" prefWidth="450.0" promptText="Vorname" />
-								<TextField fx:id="lastName" layoutX="100.0" layoutY="79.0" prefWidth="450.0" promptText="Nachname" />
-								<TextField fx:id="fkCompany" layoutX="346.0" layoutY="159.0" prefHeight="26.0" prefWidth="134.0" />
-								<Button layoutX="486.0" layoutY="159.0" mnemonicParsing="false" text="Suchen" />
-								<TextField fx:id="birthday" layoutX="100.0" layoutY="159.0" prefHeight="26.0" prefWidth="147.0" />
-								<Label layoutX="307.0" layoutY="164.0" text="Firma" />
-								<TextField fx:id="suffix" layoutX="100.0" layoutY="119.0" prefWidth="450.0" promptText="Nachname" />
-								<Label layoutX="25.0" layoutY="14.0" text="Titel" />
-								<TextField layoutX="100.0" layoutY="9.0" prefWidth="450.0" promptText="Titel" />
+								<Label layoutX="25.0" layoutY="60.0" text="Vorname" />
+								<Label layoutX="25.0" layoutY="100.0" text="Nachname" />
+								<Label layoutX="25.0" layoutY="140.0" text="Suffix" />
+								<Label layoutX="25.0" layoutY="180.0" text="Geburtstag" />
+								<TextField fx:id="firstName" layoutX="100.0" layoutY="55.0" prefWidth="450.0" promptText="Vorname" />
+								<TextField fx:id="lastName" layoutX="100.0" layoutY="95.0" prefWidth="450.0" promptText="Nachname" />
+								<CustomControl layoutX="346.0" layoutY="175.0"></CustomControl>
+								<!--  <Label layoutX="307.0" layoutY="180.0" text="Firma" />
+								<TextField fx:id="fkCompany" layoutX="346.0" layoutY="175.0" prefHeight="26.0" prefWidth="134.0" />
+								<Button layoutX="486.0" layoutY="175.0" mnemonicParsing="false" text="Suchen" />-->
+								<TextField fx:id="birthday" layoutX="100.0" layoutY="175.0" prefHeight="26.0" prefWidth="147.0" />
+								<TextField fx:id="suffix" layoutX="100.0" layoutY="135.0" prefWidth="450.0" promptText="Nachname" />
+								<Label layoutX="25.0" layoutY="20.0" text="Titel" />
+								<TextField fx:id="title" layoutX="100.0" layoutY="15.0" prefWidth="450.0" promptText="Titel" />
 							</children>
 						</AnchorPane>
 					</content>
@@ -89,17 +92,20 @@
 				</TitledPane>
 				<AnchorPane prefHeight="40.0">
 					<children>
+					<Label fx:id="errMsg" layoutX="40.353271484375" layoutY="376.0" textFill="#f50a0a" />
 						<Button layoutX="400.0" layoutY="7.0" mnemonicParsing="false" text="Abbrechen" />
-						<Button fx:id="saveBtn" layoutX="500.0" layoutY="7.0" mnemonicParsing="false" onAction="#onSave" text="Speichern" />
+						<Button fx:id="saveBtn" layoutX="500.0" layoutY="7.0" mnemonicParsing="false" onAction="#onSaveContact" text="Speichern" />
 					</children>
 				</AnchorPane>
 			</children>
 		</VBox>
       </content>
     </Tab>
-    <Tab text="Rechnungen">
+    <Tab fx:id="rechnungen" onSelectionChanged="#loadInvoices" text="Rechnungen">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+<children><ListView fx:id="invoiceListView" onMouseClicked="#handleDblClick" layoutX="30.0" layoutY="30.0" prefHeight="400.0" prefWidth="540.0" />
+</children></AnchorPane>
       </content>
     </Tab>
   </tabs>

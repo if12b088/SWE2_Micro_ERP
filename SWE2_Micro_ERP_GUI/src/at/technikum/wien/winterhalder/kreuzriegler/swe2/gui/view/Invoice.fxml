@@ -15,7 +15,14 @@
 </TitledPane><TitledPane animated="false" prefHeight="450.0" text="Rechnungszeilen">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0">
-<children><ListView fx:id="invoiceRowListView" layoutX="20.0" layoutY="150.0" prefHeight="245.0" prefWidth="550.0" /><TextField fx:id="invoiceRowName" layoutX="20.0" layoutY="30.0" prefHeight="26.0" prefWidth="550.0" /><TextField fx:id="invoiceRowAmount" layoutX="20.0" layoutY="95.0" prefHeight="26.0" prefWidth="100.0" /><TextField fx:id="invoiceRowPrice" layoutX="150.0" layoutY="95.0" prefHeight="26.0" prefWidth="100.0" /><TextField fx:id="invoiceRowUst" layoutX="280.0" layoutY="95.0" prefHeight="26.0" prefWidth="100.0" /><Label layoutX="20.0" layoutY="10.0" text="Name" /><Label layoutX="20.0" layoutY="75.0" text="Anzahl" /><Label layoutX="150.0" layoutY="75.0" text="Preis" /><Label layoutX="280.0" layoutY="75.0" text="UST" /><Label layoutX="130.0" layoutY="100.0" text="x" /><Button fx:id="invoiceRowAddButton" layoutX="407.0" layoutY="95.0" mnemonicParsing="false" text="+" /><Button fx:id="invoiceRowRemoveButton" layoutX="444.0" layoutY="95.0" mnemonicParsing="false" text="-" />
+<children><TextField fx:id="invoiceRowName" layoutX="20.0" layoutY="30.0" prefHeight="25.0" prefWidth="250.0" /><TextField fx:id="invoiceRowAmount" layoutX="280.0" layoutY="30.0" prefHeight="26.0" prefWidth="60.0" /><TextField fx:id="invoiceRowPrice" layoutX="375.0" layoutY="30.0" prefHeight="26.0" prefWidth="70.0" /><TextField fx:id="invoiceRowUst" layoutX="460.0" layoutY="30.0" prefHeight="26.0" prefWidth="45.0" /><Label layoutX="20.0" layoutY="10.0" text="Name" /><Label layoutX="280.0" layoutY="10.0" text="Anzahl" /><Label layoutX="375.0" layoutY="10.0" text="Preis" /><Label layoutX="460.0" layoutY="10.0" text="UST" /><Label layoutX="355.0" layoutY="32.0" text="x" /><Button fx:id="invoiceRowAddButton" layoutX="516.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleAddRow" text="+" /><TableView fx:id="invoiceRowTableView" layoutX="20.0" layoutY="75.0" prefHeight="280.0" prefWidth="550.0">
+  <columns>
+    <TableColumn fx:id="invoiceRowNameTableColumn" prefWidth="320.0" text="Name" />
+    <TableColumn fx:id="invoiceRowAmountTableColumn" prefWidth="70.0" text="Anzahl" />
+    <TableColumn fx:id="invoiceRowUstTableColumn" prefWidth="60.0" text="UST" />
+    <TableColumn fx:id="invoiceRowPriceTableColumn" minWidth="0.0" prefWidth="58.0" text="Preis" /><TableColumn fx:id="invoiceRowDeleteTableColumn" prefWidth="40.0" />
+  </columns>
+</TableView><Button fx:id="saveInvoice" layoutX="490.0" layoutY="371.0" mnemonicParsing="false" text="Speichern" /><Label fx:id="errMsg" layoutX="40.353271484375" layoutY="376.0" textFill="#f50a0a" />
 </children></AnchorPane>
   </content>
 </TitledPane>
