@@ -7,7 +7,7 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.impl.InvoiceWe
 
 public class ProxyFactory {
 
-	private final static boolean MOCK = false;
+	private final static boolean MOCK = true;
 
 	public static IContactProxy createContactProxy() {
 		if (MOCK) {

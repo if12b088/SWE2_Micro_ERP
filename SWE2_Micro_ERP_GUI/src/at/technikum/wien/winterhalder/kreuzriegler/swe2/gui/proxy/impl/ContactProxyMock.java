@@ -32,7 +32,6 @@ public class ContactProxyMock implements IContactProxy {
 		ContactDto company1 = new ContactDto();
 		company1.setCompanyname("Ich GmbH");
 		company1.setUid("12345");
-		companys.add(company1);
 		AddressDto address11 = new AddressDto();
 		address11.setStreet("IchStrasse 1");
 		address11.setZip("1234");
@@ -54,7 +53,6 @@ public class ContactProxyMock implements IContactProxy {
 		ContactDto company2 = new ContactDto();
 		company2.setCompanyname("Du GmbH");
 		company2.setUid("54321");
-		companys.add(company2);
 		AddressDto address21 = new AddressDto();
 		address21.setStreet("DuStrasse 1");
 		address21.setZip("4321");

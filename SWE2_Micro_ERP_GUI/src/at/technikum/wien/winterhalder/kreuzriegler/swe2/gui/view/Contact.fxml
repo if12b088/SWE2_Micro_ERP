@@ -3,7 +3,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.CustomControl?>
+<?import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactPicker?>
 <?import javafx.scene.layout.HBox?>
 
 <ScrollPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller.ContactController">
@@ -36,10 +36,7 @@
 								<Label layoutX="25.0" layoutY="180.0" text="Geburtstag" />
 								<TextField fx:id="firstName" layoutX="100.0" layoutY="55.0" prefWidth="450.0" promptText="Vorname" />
 								<TextField fx:id="lastName" layoutX="100.0" layoutY="95.0" prefWidth="450.0" promptText="Nachname" />
-								<CustomControl layoutX="300.0" layoutY="175.0"></CustomControl>
-								<!--  <Label layoutX="307.0" layoutY="180.0" text="Firma" />
-								<TextField fx:id="fkCompany" layoutX="346.0" layoutY="175.0" prefHeight="26.0" prefWidth="134.0" />
-								<Button layoutX="486.0" layoutY="175.0" mnemonicParsing="false" text="Suchen" />-->
+								<ContactPicker fx:id="contactPicker" layoutX="300.0" layoutY="175.0"></ContactPicker>
 								<TextField fx:id="birthday" layoutX="100.0" layoutY="175.0" prefHeight="26.0" prefWidth="147.0" />
 								<TextField fx:id="suffix" layoutX="100.0" layoutY="135.0" prefWidth="450.0" promptText="Nachname" />
 								<Label layoutX="25.0" layoutY="20.0" text="Titel" />
@@ -92,8 +89,8 @@
 				</TitledPane>
 				<AnchorPane prefHeight="40.0">
 					<children>
-					<Label fx:id="errMsg" layoutX="40.353271484375" layoutY="376.0" textFill="#f50a0a" />
-						<Button layoutX="400.0" layoutY="7.0" mnemonicParsing="false" text="Abbrechen" />
+					<Label fx:id="errMsg" layoutX="40" layoutY="7" textFill="#f50a0a" />
+						<Button fx:id="abortBtn" layoutX="400.0" layoutY="7.0" mnemonicParsing="false" text="Abbrechen" />
 						<Button fx:id="saveBtn" layoutX="500.0" layoutY="7.0" mnemonicParsing="false" onAction="#onSaveContact" text="Speichern" />
 					</children>
 				</AnchorPane>

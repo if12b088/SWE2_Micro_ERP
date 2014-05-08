@@ -7,9 +7,9 @@
 <?import javafx.scene.image.Image?>
 
 <fx:root xmlns:fx="http://javafx.com/fxml" type="HBox">
-	<ImageView fx:id="customImgaeView">
+	<ImageView fx:id="contactPickerImageView" fitHeight="20" fitWidth="20">
 	</ImageView>
-	<TextField fx:id="customTextField" />
-	<Button fx:id="customButtonSearch" text="Suchen"></Button>
-	<Button fx:id="customButtonRemove" text="X"></Button>
+	<TextField fx:id="contactPickerTextField" />
+	<Button fx:id="contactPickerButtonSearch" text="Suchen"></Button>
+	<Button fx:id="contactPickerButtonRemove" text="X"></Button>
 </fx:root>

@@ -71,8 +71,8 @@ public class InvoiceProxyMock implements IInvoiceProxy {
 	}
 
 	@Override
-	public List<InvoiceDto> getInvoicesBySearchstring(String contact, String dateRange,
-			String amountRange) throws ConnectionProblemException{
+	public List<InvoiceDto> getInvoicesBySearchstring(String contact,
+			Long dateFrom, Long dateTo, Double amountFrom, Double amountTo) throws ConnectionProblemException{
 		List<InvoiceDto> invoices = new ArrayList<>();
 
 		// Invoice 1

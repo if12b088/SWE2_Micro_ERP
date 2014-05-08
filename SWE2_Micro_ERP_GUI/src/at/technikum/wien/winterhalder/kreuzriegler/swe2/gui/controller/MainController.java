@@ -2,6 +2,7 @@ package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -77,7 +78,7 @@ public class MainController extends AbstractController {
 
 	@FXML
 	private Label contactErrMsg;
-	
+
 	@FXML
 	private Label invoiceErrMsg;
 
@@ -108,12 +109,12 @@ public class MainController extends AbstractController {
 	}
 
 	@FXML
-	public void handleNewContact() throws IOException {
+	public void handleNewContact() {
 		openContactInNewWindow(new ContactModel());
 	}
 
 	@FXML
-	public void handleSearchContact() throws IOException {
+	public void handleSearchContact() {
 		List<ContactDto> contacts = null;
 		try {
 			contacts = ProxyFactory
@@ -139,16 +140,62 @@ public class MainController extends AbstractController {
 	}
 
 	@FXML
-	public void handleSearchInvoice() throws IOException {
+	public void handleSearchInvoice() {
 		List<InvoiceDto> invoices = null;
+		Long dateFromInMilli = null;
+		Long dateToInMilli = null;
+		Double amountFrom = null;
+		Double amountTo = null;
+
+		//dateFrom
+		if (!searchDateFromTextField.getText().isEmpty()) {
+			try {
+				dateFromInMilli = validateDate(
+						searchDateFromTextField.getText()).getTime();
+			} catch (ParseException e) {
+				invoiceErrMsg
+						.setText("Das von Datum wurde nicht korrekt eingetragen");
+				return;
+			}
+		}
+		//dateTo
+		if (!searchDateToTextField.getText().isEmpty()) {
+			try {
+				dateToInMilli = validateDate(searchDateToTextField.getText())
+						.getTime();
+			} catch (ParseException e) {
+				invoiceErrMsg
+						.setText("Das bis Datum wurde nicht korrekt eingetragen");
+				return;
+			}
+		}
+		//amountFrom
+		if (!searchAmountFromTextField.getText().isEmpty()) {
+			try {
+			amountFrom = Double
+					.parseDouble(searchAmountFromTextField.getText());
+			}catch (NumberFormatException e) {
+				invoiceErrMsg.setText("Der von Betrag ist keine Zahl");
+			}
+		}
+		//amountTp
+		if (!searchAmountToTextField.getText().isEmpty()) {
+			try {
+				amountTo = Double
+						.parseDouble(searchAmountToTextField.getText());
+			}catch (NumberFormatException e) {
+				invoiceErrMsg.setText("Der bis Betrag ist keine Zahl");
+			}
+		}
+
 		try {
 			invoices = ProxyFactory.createInvoiceProxy()
 					.getInvoicesBySearchstring(
 							searchInvoiceTextField.getText(),
-							searchDateFromTextField.getText() + "-"
-									+ searchDateToTextField.getText(),
-							searchAmountFromTextField.getText() + "-"
-									+ searchAmountToTextField.getText());
+							dateFromInMilli,
+							dateToInMilli,
+							amountFrom,
+							amountTo);
 		} catch (ConnectionProblemException e) {
 			invoiceErrMsg.setText(e.getMessage());
 		}
@@ -161,8 +208,8 @@ public class MainController extends AbstractController {
 				iModel.setDto(iDto);
 				invoiceModels.add(iModel);
 			}
-		invoiceItems.clear();
-		invoiceItems.addAll(invoiceModels);
+			invoiceItems.clear();
+			invoiceItems.addAll(invoiceModels);
 		}
 	}
 

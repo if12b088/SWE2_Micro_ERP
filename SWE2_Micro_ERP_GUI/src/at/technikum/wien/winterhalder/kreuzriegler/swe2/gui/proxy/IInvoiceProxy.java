@@ -16,6 +16,6 @@ public interface IInvoiceProxy {
 			throws ConnectionProblemException;
 
 	public List<InvoiceDto> getInvoicesBySearchstring(String contact,
-			String dateRange, String amountRange)
+			Long dateFrom, Long dateTo, Double amountFrom, Double amountTo)
 			throws ConnectionProblemException;
 }

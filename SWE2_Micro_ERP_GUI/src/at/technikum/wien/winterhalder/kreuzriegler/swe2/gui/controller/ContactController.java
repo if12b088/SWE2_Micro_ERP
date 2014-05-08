@@ -1,12 +1,16 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller;
 
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,10 +19,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Constants;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactPicker;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ContactWasNotCreatedOrUpdatedException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
@@ -65,10 +71,9 @@ public class ContactController extends AbstractController {
 	// @FXML
 	// private TextField fkCompany;
 	@FXML
-	private HBox customHbox;
-
-	@FXML
 	private TextField birthday;
+	@FXML
+	private ContactPicker contactPicker;
 
 	// address
 	@FXML
@@ -96,6 +101,8 @@ public class ContactController extends AbstractController {
 	@FXML
 	private Button saveBtn;
 	@FXML
+	private Button abortBtn;
+	@FXML
 	private Label errMsg;
 
 	// Invoice
@@ -115,7 +122,7 @@ public class ContactController extends AbstractController {
 
 	ObservableList<InvoiceModel> invoices = FXCollections.observableArrayList();
 
-	public void setModel(ContactModel model) {
+	public void setModel(final ContactModel model) {
 		this.model = model;
 
 		personPane.disableProperty().bind(model.disableEditPersonBinding());
@@ -135,7 +142,6 @@ public class ContactController extends AbstractController {
 		lastName.textProperty().bindBidirectional(model.lastNameProperty());
 		suffix.textProperty().bindBidirectional(model.suffixProperty());
 		birthday.textProperty().bindBidirectional(model.birthDateProperty());
-		// fkCompany.textProperty().bindBidirectional(model.fkCompanyProperty());
 
 		addressAddress.textProperty().bindBidirectional(
 				model.addressAddressProperty());
@@ -158,12 +164,51 @@ public class ContactController extends AbstractController {
 				model.invoiceAddressCityProperty());
 
 		invoiceListView.setItems(invoices);
+
+		contactPicker.getContactPickerImageView().setImage(
+				new Image(Constants.IMAGE_ERR));
+
+		contactPicker.getContactPickerButtonSearch().setOnAction(
+				new EventHandler<ActionEvent>() {
+
+					@Override
+					public void handle(ActionEvent event) {
+						List<ContactDto> companies = null;
+						try {
+							companies = ProxyFactory.createContactProxy()
+									.getCompanysByName(contactPicker.getText());
+						} catch (ConnectionProblemException e) {
+							errMsg.setText(e.getMessage());
+						}
+						if (companies != null) {
+							if (companies.size() == 1) {
+								model.setCompanyReference(companies.get(0));
+								contactPicker.setText(model
+										.getCompanyReference().toString());
+								contactPicker
+										.getContactPickerImageView()
+										.setImage(new Image(Constants.IMAGE_OK));
+							} else {
+								// contactPicker.openPopup(companies);
+							}
+						}
+					}
+				});
 	}
 
 	@FXML
 	private void onSaveContact(ActionEvent event) {
 		ContactDto cDto = model.getContactDto();
 
+		if (birthday.getText() != null) {
+			try {
+				cDto.setBirthday(validateDate(birthday.getText()).getTime());
+			} catch (ParseException e) {
+				errMsg.setText("Dieses Datum ist nicht Korrekt");
+				return;
+			}
+
+		}
 		try {
 			ProxyFactory.createContactProxy().createOrUpdateContact(cDto);
 		} catch (ConnectionProblemException

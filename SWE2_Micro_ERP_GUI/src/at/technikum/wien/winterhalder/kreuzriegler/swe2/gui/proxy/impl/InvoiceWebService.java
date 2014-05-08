@@ -59,12 +59,12 @@ public class InvoiceWebService implements IInvoiceProxy {
 
 	@Override
 	public List<InvoiceDto> getInvoicesBySearchstring(String contact,
-			String dateRange, String amountRange)
+			Long dateFrom, Long dateTo, Double amountFrom, Double amountTo)
 			throws ConnectionProblemException {
 		// Obj -> JSON
 		Gson gson = new Gson();
 		String request = gson.toJson(new GetInvoicesBySearchstringRequest(
-				contact, dateRange, amountRange));
+				contact, dateFrom, dateTo, amountFrom, amountTo));
 
 		String responseJSON = ServiceHelper.sendRequest(request,
 				Uris.INVOICES_BY_SEARCHSTRING);

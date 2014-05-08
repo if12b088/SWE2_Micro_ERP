@@ -36,8 +36,9 @@ public class ContactModel {
 	private StringProperty firstName = new SimpleStringProperty();
 	private StringProperty lastName = new SimpleStringProperty();
 	private StringProperty suffix = new SimpleStringProperty();
-	private StringProperty fkCompany = new SimpleStringProperty();
 	private StringProperty birthDate = new SimpleStringProperty();
+	// Company Reference
+	private ContactDto companyReference = new ContactDto();
 	// address
 	private StringProperty addressAddress = new SimpleStringProperty();
 	private StringProperty addressZIP = new SimpleStringProperty();
@@ -147,10 +148,6 @@ public class ContactModel {
 		return suffix;
 	}
 
-	public final StringProperty fkCompanyProperty() {
-		return fkCompany;
-	}
-
 	public final StringProperty birthDateProperty() {
 		return birthDate;
 	}
@@ -231,6 +228,22 @@ public class ContactModel {
 
 	public String getLastName() {
 		return lastName.get();
+	}
+	
+	public void setBirthDate(String birthDate) {
+		this.birthDate.set(birthDate);
+	}
+
+	public String getBirthDate() {
+		return birthDate.get();
+	}
+	
+	public void setCompanyReference(ContactDto company) {
+		this.companyReference = company;
+	}
+
+	public ContactDto getCompanyReference() {
+		return companyReference;
 	}
 
 	// other
