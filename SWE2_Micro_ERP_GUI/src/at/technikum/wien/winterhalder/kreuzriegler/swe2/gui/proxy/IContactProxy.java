@@ -16,7 +16,7 @@ public interface IContactProxy {
 	public List<ContactDto> getCompanysByName(String name)
 			throws ConnectionProblemException;
 
-	public ContactDto getContactById(int id)
+	public ContactDto getContactById(long id)
 			throws ConnectionProblemException;
 
 	public List<ContactDto> getContactsByName(String name)

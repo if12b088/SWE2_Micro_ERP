@@ -71,6 +71,10 @@ public class ContactPicker extends HBox {
 		contactPickerImageView.imageProperty().bindBidirectional(
 				model.imageProperty());
 	}
+	
+	public ContactPickerModel getModel(){
+		return this.model;
+	}
 
 	@FXML
 	public void handleDblClick(MouseEvent me) {
@@ -78,7 +82,41 @@ public class ContactPicker extends HBox {
 	}
 
 	public void openPopup(List<ContactModel> companyModels) {
-		WindowHelper.openContactSearchInNewWindow(companyModels);
+		
+		if(companyModels == null){
+			companyModels = new ArrayList<>();
+		}
+		
+		final Stage newStage = new Stage();
+		
+			final ContactSearch contactPane = new ContactSearch();
+			
+			contactPane.setSearchModeToCompany();
+			
+			contactPane.setHandleSearchContactsDblClick(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					if (event.getClickCount() == 2) {
+						if (contactPane.getContactListView().getSelectionModel()
+								.getSelectedItem() != null) {
+							model.setSelectedContact(contactPane
+									.getContactListView().getSelectionModel()
+									.getSelectedItem());
+							newStage.close();
+						}
+						contactPane.getContactListView().getSelectionModel()
+								.clearSelection();
+					}
+				}
+			});
+			
+			contactPane.setModels(companyModels);
+			contactPane.disableAddButton();
+			
+			Scene scene = new Scene(contactPane, 800, 600);
+			newStage.setScene(scene);
+			newStage.setTitle("Suche Kontakt");
+			newStage.show();
 
 	}
 
@@ -107,8 +145,7 @@ public class ContactPicker extends HBox {
 				if (companyModels.size() == 0) {
 					openPopup(null);
 				} else if (companyModels.size() == 1) {
-					model.setText(companyModels.get(0).toString());
-					model.setOk();
+					model.setSelectedContact(companyModels.get(0));
 				} else {
 					openPopup(companyModels);
 				}
@@ -118,6 +155,9 @@ public class ContactPicker extends HBox {
 
 	@FXML
 	public void handleCompanyRemove() {
-
+		model.setErr();
+		model.setText("");
+		model.setSelectedContact(null);
 	}
+	
 }

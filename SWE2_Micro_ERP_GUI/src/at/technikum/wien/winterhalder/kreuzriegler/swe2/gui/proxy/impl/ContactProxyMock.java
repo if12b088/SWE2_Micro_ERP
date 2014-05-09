@@ -75,7 +75,7 @@ public class ContactProxyMock implements IContactProxy {
 	}
 
 	@Override
-	public ContactDto getContactById(int id) throws ConnectionProblemException {
+	public ContactDto getContactById(long id) throws ConnectionProblemException {
 
 		ContactDto contact = new ContactDto();
 		contact.setFirstname("Donald");

@@ -6,13 +6,13 @@
 
 <ScrollPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller.InvoiceController">
 <content><VBox>
-<children><TitledPane animated="false" minHeight="335.0" prefWidth="598.0" text="MetaDaten">
+<children><TitledPane animated="false" minHeight="335.0" prefWidth="598.0" text="MetaDaten" fx:id="metaPane">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0">
-<children><Label layoutX="20.0" layoutY="10.0" text="RechnungsNr.:" textAlignment="RIGHT" /><Label layoutX="20.0" layoutY="75.0" text="Information:" textAlignment="RIGHT" /><Label layoutX="20.0" layoutY="190.0" text="Kommentar:" textAlignment="RIGHT" /><TextField fx:id="invoiceNumber" layoutX="20.0" layoutY="30.0" prefHeight="26.0" prefWidth="201.0" /><TextArea fx:id="invoiceInformation" layoutX="20.0" layoutY="95.0" prefHeight="80.0" prefWidth="550.0" /><TextArea fx:id="invoiceComment" layoutX="20.0" layoutY="210.0" prefHeight="80.0" prefWidth="550.0" />
+<children><Label layoutX="20.0" layoutY="10.0" text="RechnungsNr.:" textAlignment="RIGHT" /><Label layoutX="20.0" layoutY="75.0" text="Information:" textAlignment="RIGHT" /><Label layoutX="20.0" layoutY="190.0" text="Kommentar:" textAlignment="RIGHT" /><TextField fx:id="invoiceNumber" layoutX="20.0" layoutY="30.0" prefHeight="26.0" prefWidth="201.0" /><TextArea fx:id="invoiceInformation" layoutX="20.0" layoutY="95.0" prefHeight="80.0" prefWidth="550.0" /><TextArea fx:id="invoiceComment" layoutX="20.0" layoutY="210.0" prefHeight="80.0" prefWidth="550.0" /><Button fx:id="printInvoice" layoutX="499.0" layoutY="30.0" mnemonicParsing="false" onAction="#handlePrintInvoice" text="Drucken" />
 </children></AnchorPane>
   </content>
-</TitledPane><TitledPane animated="false" prefHeight="450.0" text="Rechnungszeilen">
+</TitledPane><TitledPane animated="false" prefHeight="450.0" text="Rechnungszeilen" fx:id="rowPane">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0">
 <children><TextField fx:id="invoiceRowName" layoutX="20.0" layoutY="30.0" prefHeight="25.0" prefWidth="250.0" /><TextField fx:id="invoiceRowAmount" layoutX="280.0" layoutY="30.0" prefHeight="26.0" prefWidth="60.0" /><TextField fx:id="invoiceRowPrice" layoutX="375.0" layoutY="30.0" prefHeight="26.0" prefWidth="70.0" /><TextField fx:id="invoiceRowUst" layoutX="460.0" layoutY="30.0" prefHeight="26.0" prefWidth="45.0" /><Label layoutX="20.0" layoutY="10.0" text="Name" /><Label layoutX="280.0" layoutY="10.0" text="Anzahl" /><Label layoutX="375.0" layoutY="10.0" text="Preis" /><Label layoutX="460.0" layoutY="10.0" text="UST" /><Label layoutX="355.0" layoutY="32.0" text="x" /><Button fx:id="invoiceRowAddButton" layoutX="516.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleAddRow" text="+" /><TableView fx:id="invoiceRowTableView" layoutX="20.0" layoutY="75.0" prefHeight="280.0" prefWidth="550.0">
@@ -22,7 +22,7 @@
     <TableColumn fx:id="invoiceRowUstTableColumn" prefWidth="60.0" text="UST" />
     <TableColumn fx:id="invoiceRowPriceTableColumn" minWidth="0.0" prefWidth="58.0" text="Preis" /><TableColumn fx:id="invoiceRowDeleteTableColumn" prefWidth="40.0" />
   </columns>
-</TableView><Button fx:id="saveInvoice" layoutX="490.0" layoutY="371.0" mnemonicParsing="false" text="Speichern" /><Label fx:id="errMsg" layoutX="40.353271484375" layoutY="376.0" textFill="#f50a0a" />
+</TableView><Button fx:id="saveInvoice" layoutX="490.0" layoutY="371.0" mnemonicParsing="false" text="Speichern" /><Label fx:id="errMsg" layoutX="40.353271484375" layoutY="376.0" textFill="#f50a0a" /><Button fx:id="abortInvoice" layoutX="392.33837890625" layoutY="371.0" mnemonicParsing="false" text="Abbrechen" />
 </children></AnchorPane>
   </content>
 </TitledPane>

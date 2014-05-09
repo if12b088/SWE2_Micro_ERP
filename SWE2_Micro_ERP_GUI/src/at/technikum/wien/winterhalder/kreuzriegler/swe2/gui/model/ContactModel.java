@@ -1,5 +1,6 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +14,17 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.enums.AddressType;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Utils;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactPicker;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ModelDataNotValidException;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper.DateHelper;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 
 public class ContactModel {
+	// ID
+	private long id;
+
+	// Error
+	private StringProperty errorMsg = new SimpleStringProperty();
 
 	// bool
 	private boolean hasShippingAddressBool = false;
@@ -52,7 +62,7 @@ public class ContactModel {
 	private StringProperty invoiceAddressAddress = new SimpleStringProperty();
 	private StringProperty invoiceAddressZIP = new SimpleStringProperty();
 	private StringProperty invoiceAddressCity = new SimpleStringProperty();
-	
+
 	private BooleanBinding isCompany = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
@@ -123,6 +133,11 @@ public class ContactModel {
 	}
 
 	// Properties
+	// errorMsg
+	public final StringProperty errorMsgProperty() {
+		return errorMsg;
+	}
+
 	// company
 	public final StringProperty companyNameProperty() {
 		return companyName;
@@ -193,6 +208,25 @@ public class ContactModel {
 	}
 
 	// Getter and Setter
+
+	// id
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	// errorMsg
+	public String getErrorMsg() {
+		return errorMsg.get();
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg.set(errorMsg);
+	}
+
 	// company
 	public String getCompanyName() {
 		return companyName.get();
@@ -230,7 +264,7 @@ public class ContactModel {
 	public String getLastName() {
 		return lastName.get();
 	}
-	
+
 	public void setBirthDate(String birthDate) {
 		this.birthDate.set(birthDate);
 	}
@@ -238,7 +272,7 @@ public class ContactModel {
 	public String getBirthDate() {
 		return birthDate.get();
 	}
-	
+
 	public void setCompanyReference(ContactDto company) {
 		this.companyReference = company;
 	}
@@ -285,34 +319,45 @@ public class ContactModel {
 	}
 
 	// get Dtos
-	public ContactDto getContactDto() {
+	public ContactDto getContactDto() throws ModelDataNotValidException {
 		copyPropertiesToDto();
 		return contactDto;
 	}
 
-	public AddressDto getAddressDto() {
+	public AddressDto getAddressDto() throws ModelDataNotValidException {
 		copyPropertiesToDto();
 		return addressDto;
 	}
 
-	public AddressDto getShippingAddressDto() {
+	public AddressDto getShippingAddressDto() throws ModelDataNotValidException {
 		copyPropertiesToDto();
 		return shippingAddressDto;
 	}
 
-	public AddressDto getInvoiceAddressDto() {
+	public AddressDto getInvoiceAddressDto() throws ModelDataNotValidException {
 		copyPropertiesToDto();
 		return invoiceAddressDto;
 	}
 
-	private void copyPropertiesToDto() {
+	private void copyPropertiesToDto() throws ModelDataNotValidException {
 		contactDto.setCompanyname(companyName.get());
 		contactDto.setUid(uid.get());
 		contactDto.setTitle(title.get());
 		contactDto.setFirstname(firstName.get());
 		contactDto.setLastname(lastName.get());
 		contactDto.setSuffix(suffix.get());
-		// contactDto.setBirthday(birthDate.get());
+
+		if (birthDate.get() != null) {
+			try {
+				contactDto.setBirthday(DateHelper.validateDate(birthDate.get())
+						.getTime());
+			} catch (ParseException e) {
+				throw new ModelDataNotValidException(
+						"Das Geburtsdatum wurde nicht korrekt eingegeben!");
+			}
+
+		}
+
 		contactDto.setCompanyId(companyReference.getId());
 
 		if (contactDto.getAddresses().containsKey(AddressType.PRIMARY)) {
@@ -360,12 +405,26 @@ public class ContactModel {
 	}
 
 	private void copyDtoToProperties() {
+		this.id = contactDto.getId();
 		companyName.set(contactDto.getCompanyname());
 		uid.set(contactDto.getUid());
 		title.set(contactDto.getTitle());
 		firstName.set(contactDto.getFirstname());
 		lastName.set(contactDto.getLastname());
 		suffix.set(contactDto.getSuffix());
+
+		try {
+			birthDate.set(DateHelper.longToDate(contactDto.getBirthday()));
+		} catch (ParseException e) {
+			errorMsg.set(e.getMessage());
+		}
+
+		try {
+			companyReference = ProxyFactory.createContactProxy()
+					.getContactById(contactDto.getId());
+		} catch (ConnectionProblemException e) {
+			errorMsg.set(e.getMessage());
+		}
 
 		// Address
 		if (contactDto.getAddresses().containsKey(AddressType.PRIMARY)) {

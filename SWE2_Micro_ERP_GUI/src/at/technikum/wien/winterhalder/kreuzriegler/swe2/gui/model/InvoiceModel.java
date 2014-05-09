@@ -1,5 +1,12 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.Date;
+
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -7,8 +14,16 @@ import javafx.collections.ObservableList;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceRowDto;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+
 public class InvoiceModel {
 
+	private ContactModel contact = null;
+	
 	private InvoiceDto invoiceDto = new InvoiceDto();
 
 	private StringProperty nr = new SimpleStringProperty();
@@ -16,6 +31,14 @@ public class InvoiceModel {
 	private StringProperty comment = new SimpleStringProperty();
 	private ObservableList<InvoiceRowModel> rows = FXCollections
 			.observableArrayList();
+	private boolean locked = false;
+	
+	private BooleanBinding isLocked = new BooleanBinding() {
+		@Override
+		protected boolean computeValue() {
+			return locked;
+		}
+	};
 
 	// Dto
 	private InvoiceDto dto;
@@ -27,6 +50,33 @@ public class InvoiceModel {
 	public void setDto(InvoiceDto dto) {
 		this.dto = dto;
 		copyDtoToProperties();
+	}
+
+	public ContactModel getContact() {
+		return contact;
+	}
+
+	public void setContact(ContactModel contact) {
+		this.contact = contact;
+	}
+	
+	public BooleanBinding isLockedBinding(){
+		return isLocked;
+	}
+
+	/**
+	 * @return the locked
+	 */
+	public boolean isLocked() {
+		return locked;
+	}
+
+	/**
+	 * @param locked
+	 *            the locked to set
+	 */
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 
 	public final StringProperty nrProperty() {
@@ -60,6 +110,34 @@ public class InvoiceModel {
 			rows.add(rowModel);
 		}
 
+	}
+
+	public void printInvoice() {
+		// String file = "c:/temp/FirstPdf.pdf";
+		Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+		Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL,
+				BaseColor.RED);
+		Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+		Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+
+		try {
+			OutputStream file = new FileOutputStream(new File("SamplePDF.pdf"));
+
+			Document document = new Document();
+			PdfWriter.getInstance(document, file);
+
+			document.open();
+			document.add(new Paragraph("First iText PDF", catFont));
+			document.add(new Paragraph(contact.getLastName(), catFont));
+			document.add(new Paragraph(new Date().toString()));
+			
+			document.close();
+			file.close();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		setLocked(true);
 	}
 
 	@Override

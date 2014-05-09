@@ -18,17 +18,7 @@
 					<content>
 						<AnchorPane>
 							<children>
-								<ContactSearch></ContactSearch>
-								<!-- <Label layoutX="20.0" layoutY="20.0" text="Kontakt suchen"> 
-									<font> <Font size="18.0" /> </font> </Label><Label fx:id="contactErrMsg" 
-									layoutX="192.353271484375" layoutY="23.5" textFill="#ee0a0a" /> <TextField 
-									fx:id="searchContactTextField" layoutX="20.0" layoutY="50.0" onKeyPressed="#handleEnter" 
-									prefHeight="26.0" prefWidth="446.0" /> <Button fx:id="searchContactButton" 
-									layoutX="484.0" layoutY="48.0" mnemonicParsing="false" onAction="#handleSearchContact" 
-									text="Suchen" /> <Button fx:id="addContactButton" layoutX="638.0" layoutY="48.0" 
-									mnemonicParsing="false" onAction="#handleNewContact" text="+ Kontakt" /> 
-									<ListView fx:id="contactListView" layoutX="20.0" layoutY="100.0" onMouseClicked="#handleDblClick" 
-									prefHeight="450.0" prefWidth="700.0" /> -->
+								<ContactSearch fx:id="contactPane"></ContactSearch>
 							</children>
 						</AnchorPane>
 					</content>
@@ -37,24 +27,7 @@
 					<content>
 						<AnchorPane>
 							<children>
-								<InvoiceSearch></InvoiceSearch>
-								<!-- <Label layoutX="20.0" layoutY="20.0" text="Rechnung suchen"> 
-									<font> <Font size="18.0" /> </font> </Label> <Label fx:id="invoiceErrMsg" 
-									layoutX="192.353271484375" layoutY="23.5" textFill="#ee0a0a" /> <TextField 
-									fx:id="searchInvoiceTextField" layoutX="20.0" layoutY="50.0" onKeyPressed="#handleEnter" 
-									prefHeight="26.0" prefWidth="446.0" /> <Label layoutX="20.0" layoutY="90.0" 
-									text="Betrag"> <font> <Font size="18.0" /> </font> </Label> <TextField fx:id="searchAmountFromTextField" 
-									layoutX="80.0" layoutY="90.0" prefWidth="60.0" /> <TextField fx:id="searchAmountToTextField" 
-									layoutX="150.0" layoutY="90.0" prefWidth="60.0" /> <Label layoutX="230.0" 
-									layoutY="90.0" prefWidth="60.0" text="Datum"> <font> <Font size="18.0" /> 
-									</font> </Label> <TextField fx:id="searchDateFromTextField" layoutX="295.0" 
-									layoutY="90.0" prefWidth="80.0" /> <TextField fx:id="searchDateToTextField" 
-									layoutX="385.0" layoutY="90.0" prefWidth="80.0" /> <Button fx:id="searchInvoiceButton" 
-									layoutX="485.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleSearchInvoice" 
-									prefHeight="65.0" prefWidth="85.0" text="Suchen" /> <Button fx:id="addInvoiceButton" 
-									layoutX="638.0" layoutY="48.0" mnemonicParsing="false" onAction="#handleNewInvoice" 
-									text="+ Rechnung" /> <ListView fx:id="invoiceListView" layoutX="20.0" layoutY="130.0" 
-									onMouseClicked="#handleDblClick" prefHeight="420.0" prefWidth="700.0" /> -->
+								<InvoiceSearch fx:id="invoicePane"></InvoiceSearch>
 							</children>
 						</AnchorPane>
 					</content>

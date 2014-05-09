@@ -27,6 +27,7 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Constants;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactPicker;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ContactWasNotCreatedOrUpdatedException;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ModelDataNotValidException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper.DateHelper;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
@@ -69,8 +70,6 @@ public class ContactController extends AbstractController {
 	private TextField lastName;
 	@FXML
 	private TextField suffix;
-	// @FXML
-	// private TextField fkCompany;
 	@FXML
 	private TextField birthday;
 	@FXML
@@ -117,10 +116,6 @@ public class ContactController extends AbstractController {
 		setModel(new ContactModel());
 	}
 
-	// public void setDto(ContactDto dto) {
-	// model.setDto(dto);
-	// }
-
 	ObservableList<InvoiceModel> invoices = FXCollections.observableArrayList();
 
 	public void setModel(final ContactModel model) {
@@ -134,6 +129,7 @@ public class ContactController extends AbstractController {
 		// shippingAddressPane.expandedProperty().bindBidirectional((Property<Boolean>)
 		// model.hasShippingAddressBinding());
 
+		errMsg.textProperty().bind(model.errorMsgProperty());
 		companyName.textProperty().bindBidirectional(
 				model.companyNameProperty());
 		UID.textProperty().bindBidirectional(model.UIDProperty());
@@ -166,56 +162,24 @@ public class ContactController extends AbstractController {
 
 		invoiceListView.setItems(invoices);
 
-		// contactPicker.getContactPickerImageView().setImage(
-		// new Image(Constants.IMAGE_ERR));
-		//
-		// contactPicker.getContactPickerButtonSearch().setOnAction(
-		// new EventHandler<ActionEvent>() {
-		//
-		// @Override
-		// public void handle(ActionEvent event) {
-		// List<ContactDto> companies = null;
-		// try {
-		// companies = ProxyFactory.createContactProxy()
-		// .getCompanysByName(contactPicker.getText());
-		// } catch (ConnectionProblemException e) {
-		// errMsg.setText(e.getMessage());
-		// }
-		// if (companies != null) {
-		// if (companies.size() == 1) {
-		// model.setCompanyReference(companies.get(0));
-		// contactPicker.setText(model
-		// .getCompanyReference().toString());
-		// contactPicker
-		// .getContactPickerImageView()
-		// .setImage(new Image(Constants.IMAGE_OK));
-		// } else {
-		// contactPicker.openPopup(companies, model);
-		// }
-		// }
-		// }
-		// });
 	}
 
 	@FXML
 	private void onSaveContact(ActionEvent event) {
-		ContactDto cDto = model.getContactDto();
 
-		if (birthday.getText() != null) {
-			try {
-				cDto.setBirthday(DateHelper.validateDate(birthday.getText()).getTime());
-			} catch (ParseException e) {
-				errMsg.setText("Dieses Datum ist nicht Korrekt");
-				return;
-			}
-
-		}
 		try {
+			ContactDto cDto = model.getContactDto();
 			ProxyFactory.createContactProxy().createOrUpdateContact(cDto);
 		} catch (ConnectionProblemException
-				| ContactWasNotCreatedOrUpdatedException e) {
-			errMsg.setText(e.getMessage());
+				| ContactWasNotCreatedOrUpdatedException
+				| ModelDataNotValidException e) {
+			model.setErrorMsg(e.getMessage());
 		}
+	}
+	
+	@FXML void onAbort(){
+		System.out.println("abort!");
+		//this.getStage().close();
 	}
 
 	@FXML
@@ -225,14 +189,15 @@ public class ContactController extends AbstractController {
 			invoiceDtos = ProxyFactory.createInvoiceProxy()
 					.getInvoicesByContactId(1);
 		} catch (ConnectionProblemException e) {
-			errMsg.setText(e.getMessage());
+			model.setErrorMsg(e.getMessage());
 		}
 
 		if (invoiceDtos != null) {
 			for (InvoiceDto dto : invoiceDtos) {
-				InvoiceModel IModel = new InvoiceModel();
-				IModel.setDto(dto);
-				invoices.add(IModel);
+				InvoiceModel iModel = new InvoiceModel();
+				iModel.setDto(dto);
+				iModel.setContact(model);
+				invoices.add(iModel);
 			}
 			model.setInvoices(invoices);
 		}
@@ -242,8 +207,7 @@ public class ContactController extends AbstractController {
 	@FXML
 	public void handleDblClick(MouseEvent me) {
 		if (me.getClickCount() == 2) {
-			System.out.println("clicked on "
-					+ invoiceListView.getSelectionModel().getSelectedItem());
+			
 			openInvoiceInNewWindow(invoiceListView.getSelectionModel()
 					.getSelectedItem());
 		}

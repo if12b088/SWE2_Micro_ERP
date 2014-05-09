@@ -18,4 +18,11 @@ public class DateHelper {
 		sdf.setLenient(false);
 		return sdf.parse(dateString);
 	}
+
+	public static String longToDate(Long dateLong) throws ParseException {
+		Date date = new Date(dateLong);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		sdf.setLenient(false);
+		return sdf.format(date);
+	}
 }

@@ -2,8 +2,6 @@ package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.SimpleBooleanProperty;
@@ -18,21 +16,21 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceRowModel;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.tableCells.ButtonCell;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.tableCells.DoubleCell;
 
-import com.sun.prism.impl.Disposer.Record;
-
 public class InvoiceController {
+	
+	@FXML
+	private TitledPane metaPane;
+	@FXML
+	private TitledPane rowPane;
 
 	@FXML
 	// ResourceBundle that was given to the FXMLLoader
@@ -55,35 +53,25 @@ public class InvoiceController {
 																			// injected
 																			// by
 	// FXMLLoader
-
 	@FXML
 	// fx:id="invoiceRowAmountTableColumn"
 	private TableColumn<InvoiceRowModel, Double> invoiceRowAmountTableColumn; // Value
-																				// injected
-																				// by
 	// FXMLLoader
-
 	@FXML
 	// fx:id="invoiceRowUstTableColumn"
 	private TableColumn<InvoiceRowModel, Double> invoiceRowUstTableColumn; // Value
 																			// injected
 																			// by
 	// FXMLLoader
-
 	@FXML
 	// fx:id="invoiceRowPriceTableColumn"
 	private TableColumn<InvoiceRowModel, Double> invoiceRowPriceTableColumn; // Value
 																				// injected
 																				// by
-
 	@FXML
 	// fx:id="invoiceRowDeleteTableColumn"
 	private TableColumn<InvoiceRowModel, Boolean> invoiceRowDeleteTableColumn; // Value
 																				// injected
-																				// by
-
-	// FXMLLoader
-
 	@FXML
 	// fx:id="invoiceRowPrice"
 	private TextField invoiceRowPrice; // Value injected by FXMLLoader
@@ -115,6 +103,10 @@ public class InvoiceController {
 	
 	@FXML
     private Button saveInvoice;
+	@FXML
+	private Button abortInvoice;
+	@FXML
+	private Button printInvoice;
 
 	@FXML
 	private Label errMsg;
@@ -124,21 +116,7 @@ public class InvoiceController {
 	@FXML
 	// This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
-		assert invoiceRowName != null : "fx:id=\"invoiceRowName\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowAmount != null : "fx:id=\"invoiceRowAmount\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowPriceTableColumn != null : "fx:id=\"invoiceRowPriceTableColumn\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceComment != null : "fx:id=\"invoiceComment\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowAmountTableColumn != null : "fx:id=\"invoiceRowAmountTableColumn\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowPrice != null : "fx:id=\"invoiceRowPrice\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowRemoveButton != null : "fx:id=\"invoiceRowRemoveButton\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowUstTableColumn != null : "fx:id=\"invoiceRowUstTableColumn\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceInformation != null : "fx:id=\"invoiceInformation\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowTableView != null : "fx:id=\"invoiceRowTableView\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowAddButton != null : "fx:id=\"invoiceRowAddButton\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowNameTableColumn != null : "fx:id=\"invoiceRowNameTableColumn\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceNumber != null : "fx:id=\"invoiceNumber\" was not injected: check your FXML file 'Invoice.fxml'.";
-		assert invoiceRowUst != null : "fx:id=\"invoiceRowUst\" was not injected: check your FXML file 'Invoice.fxml'.";
-
+		
 	}
 
 	public void setModel(final InvoiceModel model) {
@@ -154,6 +132,9 @@ public class InvoiceController {
 		this.model.getRows().add(row2);
 		this.model.getRows().add(row3);
 		this.model.getRows().add(row4);
+		
+		metaPane.disableProperty().bind(model.isLockedBinding());
+		rowPane.disableProperty().bind(model.isLockedBinding());
 
 		invoiceNumber.textProperty().bindBidirectional(model.nrProperty());
 		invoiceInformation.textProperty().bindBidirectional(
@@ -310,6 +291,11 @@ public class InvoiceController {
 		}
 		
 		model.getRows().add(row);
+	}
+	
+	@FXML
+	public void handlePrintInvoice(){
+		model.printInvoice();
 	}
 	
 }

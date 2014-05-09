@@ -3,9 +3,6 @@
  */
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +10,6 @@ import javafx.stage.Stage;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller.AbstractController;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller.ContactController;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller.InvoiceController;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactSearch;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
 
@@ -23,27 +19,7 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
  */
 public class WindowHelper {
 
-	public static void openContactSearchInNewWindow(List<ContactModel> models) {
-//		ContactSearch controller = openInNewWindow("../customControl/ContactSearch.fxml");
-//		controller.setModels(models);
-		
-		if(models == null){
-			models = new ArrayList<>();
-		}
-		
-		Stage newStage = new Stage();
-		
-			ContactSearch cs = new ContactSearch();
-			
-			cs.setModels(models);
-			cs.disableAddButton();
-			
-			Scene scene = new Scene(cs, 800, 600);
-			newStage.setScene(scene);
-			newStage.setTitle("Suche Kontakt");
-			newStage.show();
-	}
-	
+
 	public static void openContactInNewWindow(ContactModel model) {
 		ContactController controller = openInNewWindow("../view/Contact.fxml");
 		controller.setModel(model);

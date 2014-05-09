@@ -62,7 +62,7 @@ public class ContactWebService implements IContactProxy {
 	}
 
 	@Override
-	public ContactDto getContactById(int id) throws ConnectionProblemException {
+	public ContactDto getContactById(long id) throws ConnectionProblemException {
 		// Obj -> JSON
 		Gson gson = new Gson();
 		String request = gson.toJson(new GetContactByIdRequest(id));

@@ -12,6 +12,7 @@
 	<classpathentry exported="true" kind="lib" path="httpcore-4.3.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="httpmime-4.3.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="gson-2.2.4.jar"/>
-	<classpathentry kind="lib" path="jfxrt.jar"/>
+	<classpathentry exported="true" kind="lib" path="jfxrt.jar"/>
+	<classpathentry exported="true" kind="lib" path="itextpdf-5.5.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

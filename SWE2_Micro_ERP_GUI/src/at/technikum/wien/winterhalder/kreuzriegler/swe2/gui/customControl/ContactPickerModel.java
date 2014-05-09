@@ -1,15 +1,14 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl;
 
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 
 public class ContactPickerModel {
-	private ContactModel selectedContact = new ContactModel();
+	private ContactModel selectedContact = null;
 
 	private StringProperty text = new SimpleStringProperty();
 	private ObjectProperty<Image> image = new SimpleObjectProperty<>();
@@ -64,6 +63,10 @@ public class ContactPickerModel {
 	 */
 	public void setSelectedContact(ContactModel selectedContact) {
 		this.selectedContact = selectedContact;
+		if(selectedContact != null){
+		setText(selectedContact.toString());
+		setOk();
+		}
 	}
 
 	// Properties

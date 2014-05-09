@@ -119,7 +119,7 @@
 									<children>
 										<Label fx:id="errMsg" layoutX="40" layoutY="7" textFill="#f50a0a" />
 										<Button fx:id="abortBtn" layoutX="400.0" layoutY="7.0"
-											mnemonicParsing="false" text="Abbrechen" />
+											mnemonicParsing="false" onAction="#onAbort" text="Abbrechen" />
 										<Button fx:id="saveBtn" layoutX="500.0" layoutY="7.0"
 											mnemonicParsing="false" onAction="#onSaveContact" text="Speichern" />
 									</children>
