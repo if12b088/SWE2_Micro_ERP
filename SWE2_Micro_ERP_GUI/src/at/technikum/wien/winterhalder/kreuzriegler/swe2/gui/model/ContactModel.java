@@ -12,6 +12,7 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.AddressDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.enums.AddressType;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Utils;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactPicker;
 
 public class ContactModel {
 
@@ -51,7 +52,7 @@ public class ContactModel {
 	private StringProperty invoiceAddressAddress = new SimpleStringProperty();
 	private StringProperty invoiceAddressZIP = new SimpleStringProperty();
 	private StringProperty invoiceAddressCity = new SimpleStringProperty();
-
+	
 	private BooleanBinding isCompany = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
@@ -312,7 +313,7 @@ public class ContactModel {
 		contactDto.setLastname(lastName.get());
 		contactDto.setSuffix(suffix.get());
 		// contactDto.setBirthday(birthDate.get());
-		// contactDto.setCompanyId(fkCompany);
+		contactDto.setCompanyId(companyReference.getId());
 
 		if (contactDto.getAddresses().containsKey(AddressType.PRIMARY)) {
 			addressDto = contactDto.getAddresses().get(AddressType.PRIMARY);

@@ -51,30 +51,6 @@ public abstract class AbstractController implements Initializable {
 		}
 	}
 
-	// public void openContactInNewWindow2(ContactModel model) {
-	// Stage newStage = new Stage();
-	// try {
-	// FXMLLoader fl = new FXMLLoader();
-	// fl.setLocation(getClass().getResource("../view/Contact.fxml"));
-	// fl.load();
-	// Parent root = fl.getRoot();
-	// // Pane root = (Pane) fl.load(getClass().getResource(resource));
-	//
-	// ContactController controller = (ContactController) fl
-	// .getController();
-	// controller.setModel(model);
-	//
-	// Scene scene = new Scene(root, 600, 800);
-	// scene.getStylesheets().add(
-	// getClass().getResource("application.css").toExternalForm());
-	// newStage.setScene(scene);
-	// newStage.setTitle("Micro ERP");
-	// newStage.show();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-
 	public void openContactInNewWindow(ContactModel model) {
 		ContactController controller = openInNewWindow("../view/Contact.fxml");
 		controller.setModel(model);
@@ -111,38 +87,4 @@ public abstract class AbstractController implements Initializable {
 		}
 		return null;
 	}
-
-	protected Date validateDate(String dateString) throws ParseException {
-		// check birthDate
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-		sdf.setLenient(false);
-		return sdf.parse(dateString);
-	}
-	// TODO unused!
-	// private void show(String resource, String title, Modality m,
-	// String... cssList) throws IOException {
-	//
-	// FXMLLoader fl = new FXMLLoader();
-	// fl.setLocation(getClass().getResource(resource));
-	// fl.load();
-	// Parent root = fl.getRoot();
-	//
-	// Stage newStage = new Stage(StageStyle.DECORATED);
-	// newStage.initModality(m);
-	// newStage.initOwner(stage);
-	// Scene scene = new Scene(root, 1024, 768);
-	// scene.getStylesheets().add(
-	// getClass().getResource("application.css").toExternalForm());
-	// // more css by code
-	// for (String css : cssList) {
-	// scene.getStylesheets().add(
-	// getClass().getResource(css).toExternalForm());
-	// }
-	//
-	// AbstractController controller = (AbstractController) fl.getController();
-	// controller.setStage(newStage);
-	// newStage.setScene(scene);
-	// newStage.setTitle(title);
-	// newStage.show();
-	// }
 }
