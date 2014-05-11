@@ -20,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.enums.ContactPickerSearchType;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper.WindowHelper;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
@@ -42,6 +43,8 @@ public class ContactSearch extends AnchorPane {
 	// fx:id="contactListView"
 	private ListView<ContactModel> contactListView; // Value injected by
 													// FXMLLoader
+	
+	private ContactPickerSearchType searchType = ContactPickerSearchType.CONTACTS;
 
 	ObservableList<ContactModel> contactItems = FXCollections
 			.observableArrayList();
@@ -200,6 +203,7 @@ public class ContactSearch extends AnchorPane {
 		searchContactTextField.removeEventHandler(KeyEvent.KEY_PRESSED, handleSearchCompaniesEnter);
 		searchContactButton.addEventHandler(ActionEvent.ACTION, handleSearchContactsButton);
 		searchContactTextField.addEventHandler(KeyEvent.KEY_PRESSED, handleSearchContactsEnter);
+		searchType = ContactPickerSearchType.CONTACTS;
 	}
 	
 	public void setSearchModeToCompany(){
@@ -207,6 +211,7 @@ public class ContactSearch extends AnchorPane {
 		searchContactTextField.removeEventHandler(KeyEvent.KEY_PRESSED, handleSearchContactsEnter);
 		searchContactButton.addEventHandler(ActionEvent.ACTION, handleSearchCompaniesButton);
 		searchContactTextField.addEventHandler(KeyEvent.KEY_PRESSED, handleSearchCompaniesEnter);
+		searchType = ContactPickerSearchType.COMPANIES;
 	}
 	
 

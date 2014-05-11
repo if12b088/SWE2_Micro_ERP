@@ -1,16 +1,12 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller;
 
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,16 +15,13 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Constants;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactPicker;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ContactWasNotCreatedOrUpdatedException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ModelDataNotValidException;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper.DateHelper;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
@@ -161,6 +154,8 @@ public class ContactController extends AbstractController {
 				model.invoiceAddressCityProperty());
 
 		invoiceListView.setItems(invoices);
+		
+		contactPicker.setSearchTypeToContacts();
 
 	}
 
@@ -195,7 +190,7 @@ public class ContactController extends AbstractController {
 		if (invoiceDtos != null) {
 			for (InvoiceDto dto : invoiceDtos) {
 				InvoiceModel iModel = new InvoiceModel();
-				iModel.setDto(dto);
+				iModel.setinvoiceDto(dto);
 				iModel.setContact(model);
 				invoices.add(iModel);
 			}

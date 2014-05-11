@@ -21,7 +21,7 @@ public class ContactProxyMock implements IContactProxy {
 	public void createOrUpdateContact(ContactDto dto)
 			throws ConnectionProblemException,
 			ContactWasNotCreatedOrUpdatedException {
-
+		throw new ConnectionProblemException("Kontakt wurde nicht gespeichert!");
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class ContactProxyMock implements IContactProxy {
 		company2.getAddresses().put(AddressType.SHIPPING, address22);
 		company2.getAddresses().put(AddressType.INVOICE, address23);
 
-		companys.add(company2);
+		//companys.add(company2);
 
 		return companys;
 	}

@@ -11,10 +11,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,16 +18,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Constants;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.enums.ContactPickerSearchType;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper.WindowHelper;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 
@@ -48,6 +41,10 @@ public class ContactPicker extends HBox {
 	private ListView<ContactDto> contactPickerListView;
 
 	private ContactPickerModel model = new ContactPickerModel();
+
+	private ContactSearch contactPane = new ContactSearch();
+
+	private ContactPickerSearchType searchType = ContactPickerSearchType.CONTACTS;
 
 	public ContactPicker() {
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
@@ -71,93 +68,110 @@ public class ContactPicker extends HBox {
 		contactPickerImageView.imageProperty().bindBidirectional(
 				model.imageProperty());
 	}
-	
-	public ContactPickerModel getModel(){
+
+	public ContactPickerModel getModel() {
 		return this.model;
 	}
 
-	@FXML
-	public void handleDblClick(MouseEvent me) {
+//	@FXML
+//	public void handleDblClick(MouseEvent me) {
+//
+//	}
 
-	}
+	public void openPopup(List<ContactModel> contactModels) {
 
-	public void openPopup(List<ContactModel> companyModels) {
-		
-		if(companyModels == null){
-			companyModels = new ArrayList<>();
+		if (contactModels == null) {
+			contactModels = new ArrayList<>();
 		}
-		
+
 		final Stage newStage = new Stage();
 		
-			final ContactSearch contactPane = new ContactSearch();
-			
-			contactPane.setSearchModeToCompany();
-			
-			contactPane.setHandleSearchContactsDblClick(new EventHandler<MouseEvent>() {
-				@Override
-				public void handle(MouseEvent event) {
-					if (event.getClickCount() == 2) {
-						if (contactPane.getContactListView().getSelectionModel()
-								.getSelectedItem() != null) {
-							model.setSelectedContact(contactPane
-									.getContactListView().getSelectionModel()
-									.getSelectedItem());
-							newStage.close();
+		if(searchType == ContactPickerSearchType.CONTACTS){
+			contactPane.setSearchModeToContacts();
+		}
+		if(searchType == ContactPickerSearchType.COMPANIES){
+			contactPane.setSearchModeToCompany();			
+		}
+
+		contactPane
+				.setHandleSearchContactsDblClick(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						if (event.getClickCount() == 2) {
+							if (contactPane.getContactListView()
+									.getSelectionModel().getSelectedItem() != null) {
+								model.setSelectedContact(contactPane
+										.getContactListView()
+										.getSelectionModel().getSelectedItem());
+								newStage.close();
+							}
+							contactPane.getContactListView()
+									.getSelectionModel().clearSelection();
 						}
-						contactPane.getContactListView().getSelectionModel()
-								.clearSelection();
 					}
-				}
-			});
-			
-			contactPane.setModels(companyModels);
-			contactPane.disableAddButton();
-			
-			Scene scene = new Scene(contactPane, 800, 600);
-			newStage.setScene(scene);
-			newStage.setTitle("Suche Kontakt");
-			newStage.show();
+				});
+
+		contactPane.setModels(contactModels);
+		contactPane.disableAddButton();
+
+		Scene scene = new Scene(contactPane, 800, 600);
+		newStage.setScene(scene);
+		newStage.setTitle("Suche Kontakt");
+		newStage.show();
 
 	}
 
 	@FXML
-	public void handleCompanySearch() {
+	public void handleSearch() {
 
-		if (model.getText() == null) {
+		if (model.getText() == null || model.getText() == "") {
 			openPopup(null);
 		} else {
-			List<ContactDto> companies = null;
+			List<ContactDto> contacts = null;
 			try {
-				companies = ProxyFactory.createContactProxy()
-						.getCompanysByName(model.getText());
+				if(searchType == ContactPickerSearchType.CONTACTS){
+					contacts = ProxyFactory.createContactProxy()
+							.getContactsByName(model.getText());
+				}
+				if(searchType == ContactPickerSearchType.COMPANIES){
+					contacts = ProxyFactory.createContactProxy()
+							.getCompanysByName(model.getText());
+				}
 			} catch (ConnectionProblemException e) {
 				// errMsg.setText(e.getMessage());
 			}
-			if (companies != null) {
+			if (contacts != null) {
 
-				List<ContactModel> companyModels = new ArrayList<>();
+				List<ContactModel> contactModels = new ArrayList<>();
 
-				for (ContactDto cDto : companies) {
+				for (ContactDto cDto : contacts) {
 					ContactModel cModel = new ContactModel();
 					cModel.setDto(cDto);
-					companyModels.add(cModel);
+					contactModels.add(cModel);
 				}
-				if (companyModels.size() == 0) {
+				if (contactModels.size() == 0) {
 					openPopup(null);
-				} else if (companyModels.size() == 1) {
-					model.setSelectedContact(companyModels.get(0));
+				} else if (contactModels.size() == 1) {
+					model.setSelectedContact(contactModels.get(0));
 				} else {
-					openPopup(companyModels);
+					openPopup(contactModels);
 				}
 			}
 		}
 	}
 
 	@FXML
-	public void handleCompanyRemove() {
+	public void handleRemove() {
 		model.setErr();
 		model.setText("");
 		model.setSelectedContact(null);
 	}
 	
+	public void setSearchTypeToContacts(){
+		this.searchType = ContactPickerSearchType.CONTACTS;
+	}
+	public void setSearchTypeToCompanies(){
+		this.searchType = ContactPickerSearchType.COMPANIES;
+	}
+
 }

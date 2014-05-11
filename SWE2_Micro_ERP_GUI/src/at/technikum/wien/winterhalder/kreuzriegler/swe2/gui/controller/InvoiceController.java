@@ -20,13 +20,18 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactPicker;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.InvoiceWasNotCreatedOrUpdatedException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceRowModel;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.tableCells.ButtonCell;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.tableCells.DoubleCell;
 
 public class InvoiceController {
-	
+
 	@FXML
 	private TitledPane metaPane;
 	@FXML
@@ -41,6 +46,8 @@ public class InvoiceController {
 	@FXML
 	// fx:id="invoiceRowName"
 	private TextField invoiceRowName; // Value injected by FXMLLoader
+	@FXML
+	private ContactPicker contactPicker;
 	@FXML
 	// fx:id="invoiceRowAmount"
 	private TextField invoiceRowAmount; // Value injected by FXMLLoader
@@ -100,9 +107,9 @@ public class InvoiceController {
 	@FXML
 	// fx:id="invoiceRowUst"
 	private TextField invoiceRowUst; // Value injected by FXMLLoader
-	
+
 	@FXML
-    private Button saveInvoice;
+	private Button saveInvoice;
 	@FXML
 	private Button abortInvoice;
 	@FXML
@@ -116,26 +123,20 @@ public class InvoiceController {
 	@FXML
 	// This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
-		
+		contactPicker.setSearchTypeToContacts();
 	}
 
 	public void setModel(final InvoiceModel model) {
 
 		this.model = model;
 
-		InvoiceRowModel row1 = new InvoiceRowModel("Posten 1", 3.0, 20.0, 30.0);
-		InvoiceRowModel row2 = new InvoiceRowModel("Posten 2", 10.0, 20.0, 45.0);
-		InvoiceRowModel row3 = new InvoiceRowModel("Posten 3", 1.0, 20.0, 130.0);
-		InvoiceRowModel row4 = new InvoiceRowModel("Posten 4", 5.0, 20.0, 50.0);
-
-		this.model.getRows().add(row1);
-		this.model.getRows().add(row2);
-		this.model.getRows().add(row3);
-		this.model.getRows().add(row4);
-		
+		if (model.getContact() != null) {
+			contactPicker.getModel().setSelectedContact(model.getContact());
+		}
 		metaPane.disableProperty().bind(model.isLockedBinding());
 		rowPane.disableProperty().bind(model.isLockedBinding());
 
+		errMsg.textProperty().bind(model.errorMsgProperty());
 		invoiceNumber.textProperty().bindBidirectional(model.nrProperty());
 		invoiceInformation.textProperty().bindBidirectional(
 				model.informationProperty());
@@ -261,41 +262,53 @@ public class InvoiceController {
 		invoiceRowTableView.setEditable(true);
 		invoiceRowTableView.setItems(model.getRows());
 	}
-	//Add Row
+
+	// Add Row
 	@FXML
 	public void handleAddRow() throws IOException {
 		InvoiceRowModel row = new InvoiceRowModel();
-		
-		if(invoiceRowName.getText().isEmpty()){
+
+		if (invoiceRowName.getText().isEmpty()) {
 			row.setName("");
-		}else{
+		} else {
 			row.setName(invoiceRowName.getText());
 		}
-		
-		if(invoiceRowAmount.getText().isEmpty()){
+
+		if (invoiceRowAmount.getText().isEmpty()) {
 			row.setAmount(0d);
-		}else{
+		} else {
 			row.setAmount(Double.parseDouble(invoiceRowAmount.getText()));
 		}
-		
-		if(invoiceRowUst.getText().isEmpty()){
+
+		if (invoiceRowUst.getText().isEmpty()) {
 			row.setUst(0d);
-		}else{
+		} else {
 			row.setUst(Double.parseDouble(invoiceRowUst.getText()));
 		}
-		
-		if(invoiceRowPrice.getText().isEmpty()){
+
+		if (invoiceRowPrice.getText().isEmpty()) {
 			row.setPrice(0d);
-		}else{
+		} else {
 			row.setPrice(Double.parseDouble(invoiceRowPrice.getText()));
 		}
-		
+
 		model.getRows().add(row);
 	}
-	
+
 	@FXML
-	public void handlePrintInvoice(){
+	public void onSaveInvoice() {
+		try {
+			InvoiceDto iDto = model.getinvoiceDto();
+			ProxyFactory.createInvoiceProxy().CreateOrUpdateInvoice(iDto);
+		} catch (ConnectionProblemException
+				| InvoiceWasNotCreatedOrUpdatedException e) {
+			model.setErrorMsg(e.getMessage());
+		}
+	}
+
+	@FXML
+	public void handlePrintInvoice() {
 		model.printInvoice();
 	}
-	
+
 }

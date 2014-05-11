@@ -20,10 +20,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper.DateHelper;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper.WindowHelper;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 
@@ -149,10 +151,24 @@ public class InvoiceSearch extends AnchorPane {
 
 		if (invoices != null) {
 			List<InvoiceModel> invoiceModels = new ArrayList<>();
-
 			for (InvoiceDto iDto : invoices) {
+				ContactModel cModel = null;
+				ContactDto cDto = null;
+				if (iDto.getContactId() != 0) {
+					try {
+						cDto = ProxyFactory.createContactProxy()
+								.getContactById(iDto.getContactId());
+						cModel = new ContactModel();
+						cModel.setDto(cDto);
+						
+					} catch (ConnectionProblemException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 				InvoiceModel iModel = new InvoiceModel();
-				iModel.setDto(iDto);
+				iModel.setinvoiceDto(iDto);
+				iModel.setContact(cModel);
 				invoiceModels.add(iModel);
 			}
 			invoiceItems.clear();
@@ -167,8 +183,8 @@ public class InvoiceSearch extends AnchorPane {
 					+ invoiceListView.getSelectionModel().getSelectedItem());
 
 			if (invoiceListView.getSelectionModel().getSelectedItem() != null) {
-				 WindowHelper.openInvoiceInNewWindow(invoiceListView.getSelectionModel()
-				 .getSelectedItem());
+				WindowHelper.openInvoiceInNewWindow(invoiceListView
+						.getSelectionModel().getSelectedItem());
 			}
 			invoiceListView.getSelectionModel().clearSelection();
 		}

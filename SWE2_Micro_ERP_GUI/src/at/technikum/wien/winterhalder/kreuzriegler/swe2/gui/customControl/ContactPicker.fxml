@@ -10,6 +10,6 @@
 	<ImageView fx:id="contactPickerImageView" fitHeight="20" fitWidth="20">
 	</ImageView>
 	<TextField fx:id="contactPickerTextField" />
-	<Button fx:id="contactPickerButtonSearch" text="Suchen" onAction="#handleCompanySearch"></Button>
-	<Button fx:id="contactPickerButtonRemove" text="X" onAction="#handleCompanyRemove"></Button>
+	<Button fx:id="contactPickerButtonSearch" text="Suchen" onAction="#handleSearch"></Button>
+	<Button fx:id="contactPickerButtonRemove" text="X" onAction="#handleRemove"></Button>
 </fx:root>

@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -21,10 +20,17 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class InvoiceModel {
+	// ID
+	private long id;
 
 	private ContactModel contact = null;
-	
+
+	// Error
+	private StringProperty errorMsg = new SimpleStringProperty();
+
 	private InvoiceDto invoiceDto = new InvoiceDto();
+
+	// private ContactDto contactReference = new ContactDto();
 
 	private StringProperty nr = new SimpleStringProperty();
 	private StringProperty infomation = new SimpleStringProperty();
@@ -32,7 +38,7 @@ public class InvoiceModel {
 	private ObservableList<InvoiceRowModel> rows = FXCollections
 			.observableArrayList();
 	private boolean locked = false;
-	
+
 	private BooleanBinding isLocked = new BooleanBinding() {
 		@Override
 		protected boolean computeValue() {
@@ -40,15 +46,13 @@ public class InvoiceModel {
 		}
 	};
 
-	// Dto
-	private InvoiceDto dto;
-
-	public InvoiceDto getDto() {
-		return dto;
+	public InvoiceDto getinvoiceDto() {
+		copyPropertiesToDto();
+		return invoiceDto;
 	}
 
-	public void setDto(InvoiceDto dto) {
-		this.dto = dto;
+	public void setinvoiceDto(InvoiceDto dto) {
+		this.invoiceDto = dto;
 		copyDtoToProperties();
 	}
 
@@ -59,8 +63,8 @@ public class InvoiceModel {
 	public void setContact(ContactModel contact) {
 		this.contact = contact;
 	}
-	
-	public BooleanBinding isLockedBinding(){
+
+	public BooleanBinding isLockedBinding() {
 		return isLocked;
 	}
 
@@ -78,6 +82,15 @@ public class InvoiceModel {
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
+	
+	// errorMsg
+	public String getErrorMsg() {
+		return errorMsg.get();
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg.set(errorMsg);
+	}
 
 	public final StringProperty nrProperty() {
 		return nr;
@@ -90,18 +103,24 @@ public class InvoiceModel {
 	public final StringProperty commentProperty() {
 		return comment;
 	}
+	
+	// errorMsg
+	public final StringProperty errorMsgProperty() {
+		return errorMsg;
+	}
 
 	public ObservableList<InvoiceRowModel> getRows() {
 		return rows;
 	}
 
-	public void copyDtoToProperties() {
-		this.nr.set(this.dto.getNr());
-		this.infomation.set(this.dto.getInformation());
-		this.comment.set(this.dto.getComment());
+	private void copyDtoToProperties() {
+		this.id = invoiceDto.getId();
+		this.nr.set(this.invoiceDto.getNr());
+		this.infomation.set(this.invoiceDto.getInformation());
+		this.comment.set(this.invoiceDto.getComment());
 		// Rows
 		this.rows.clear();
-		for (InvoiceRowDto row : this.dto.getRows()) {
+		for (InvoiceRowDto row : this.invoiceDto.getRows()) {
 			InvoiceRowModel rowModel = new InvoiceRowModel();
 			rowModel.setName(row.getName());
 			rowModel.setAmount(row.getAmount());
@@ -109,6 +128,27 @@ public class InvoiceModel {
 			rowModel.setPrice(row.getPrice());
 			rows.add(rowModel);
 		}
+		this.locked = invoiceDto.isLocked();
+	}
+
+	private void copyPropertiesToDto() {
+		// TODO dates??
+		invoiceDto.setId(id);
+		invoiceDto.setNr(nr.get());
+		invoiceDto.setInformation(infomation.get());
+		invoiceDto.setComment(comment.get());
+
+		invoiceDto.getRows().clear();
+		for (InvoiceRowModel row : rows) {
+			InvoiceRowDto rowDto = new InvoiceRowDto();
+			rowDto.setName(row.getName());
+			rowDto.setAmount(row.getAmount());
+			rowDto.setUst(row.getUst());
+			rowDto.setPrice(row.getPrice());
+			rowDto.setInvoiceId(id);
+			invoiceDto.getRows().add(rowDto);
+		}
+		invoiceDto.setLocked(locked);
 
 	}
 
@@ -130,7 +170,7 @@ public class InvoiceModel {
 			document.add(new Paragraph("First iText PDF", catFont));
 			document.add(new Paragraph(contact.getLastName(), catFont));
 			document.add(new Paragraph(new Date().toString()));
-			
+
 			document.close();
 			file.close();
 		} catch (Exception e) {

@@ -15,6 +15,7 @@ public class InvoiceProxyMock implements IInvoiceProxy {
 	@Override
 	public void CreateOrUpdateInvoice(InvoiceDto dto)
 			throws ConnectionProblemException,InvoiceWasNotCreatedOrUpdatedException {
+		throw new InvoiceWasNotCreatedOrUpdatedException("Rechnung wurde nicht gespeichert!");
 	}
 
 	@Override
@@ -122,9 +123,9 @@ public class InvoiceProxyMock implements IInvoiceProxy {
 		invoices.add(invoice1);
 		invoices.add(invoice2);
 		
-		throw new ConnectionProblemException("Keine Verbindung moeglich");
+		//throw new ConnectionProblemException("Keine Verbindung moeglich");
 		
-		//return invoices;
+		return invoices;
 	}
 
 }
