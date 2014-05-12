@@ -69,7 +69,7 @@ public class ContactProxyMock implements IContactProxy {
 		company2.getAddresses().put(AddressType.SHIPPING, address22);
 		company2.getAddresses().put(AddressType.INVOICE, address23);
 
-		//companys.add(company2);
+		companys.add(company2);
 
 		return companys;
 	}

@@ -155,7 +155,7 @@ public class ContactController extends AbstractController {
 
 		invoiceListView.setItems(invoices);
 		
-		contactPicker.setSearchTypeToContacts();
+		contactPicker.setSearchTypeToCompanies();
 
 	}
 
