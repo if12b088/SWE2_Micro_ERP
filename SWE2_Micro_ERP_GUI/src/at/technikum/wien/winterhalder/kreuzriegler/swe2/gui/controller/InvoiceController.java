@@ -133,8 +133,10 @@ public class InvoiceController {
 		if (model.getContact() != null) {
 			contactPicker.getModel().setSelectedContact(model.getContact());
 		}
-		metaPane.disableProperty().bind(model.isLockedBinding());
-		rowPane.disableProperty().bind(model.isLockedBinding());
+//		metaPane.disableProperty().bind(model.isLockedBinding());
+//		rowPane.disableProperty().bind(model.isLockedBinding());
+		metaPane.disableProperty().bind(model.lockedProperty());
+		rowPane.disableProperty().bind(model.lockedProperty());
 
 		errMsg.textProperty().bind(model.errorMsgProperty());
 		invoiceNumber.textProperty().bindBidirectional(model.nrProperty());

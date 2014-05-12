@@ -3,9 +3,11 @@ package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -37,14 +39,16 @@ public class InvoiceModel {
 	private StringProperty comment = new SimpleStringProperty();
 	private ObservableList<InvoiceRowModel> rows = FXCollections
 			.observableArrayList();
-	private boolean locked = false;
+	// private boolean locked = false;
 
-	private BooleanBinding isLocked = new BooleanBinding() {
-		@Override
-		protected boolean computeValue() {
-			return locked;
-		}
-	};
+	private BooleanProperty locked = new SimpleBooleanProperty();
+
+	// private BooleanBinding isLocked = new BooleanBinding() {
+	// @Override
+	// protected boolean computeValue() {
+	// return locked;
+	// }
+	// };
 
 	public InvoiceDto getinvoiceDto() {
 		copyPropertiesToDto();
@@ -64,25 +68,29 @@ public class InvoiceModel {
 		this.contact = contact;
 	}
 
-	public BooleanBinding isLockedBinding() {
-		return isLocked;
-	}
+	// public BooleanBinding isLockedBinding() {
+	// return isLocked;
+	// }
+	//
+	// /**
+	// * @return the locked
+	// */
+	// public boolean isLocked() {
+	// return locked;
+	// }
+	//
+	// /**
+	// * @param locked
+	// * the locked to set
+	// */
+	// public void setLocked(boolean locked) {
+	// this.locked = locked;
+	// }
 
-	/**
-	 * @return the locked
-	 */
-	public boolean isLocked() {
+	public final BooleanProperty lockedProperty() {
 		return locked;
 	}
 
-	/**
-	 * @param locked
-	 *            the locked to set
-	 */
-	public void setLocked(boolean locked) {
-		this.locked = locked;
-	}
-	
 	// errorMsg
 	public String getErrorMsg() {
 		return errorMsg.get();
@@ -103,7 +111,7 @@ public class InvoiceModel {
 	public final StringProperty commentProperty() {
 		return comment;
 	}
-	
+
 	// errorMsg
 	public final StringProperty errorMsgProperty() {
 		return errorMsg;
@@ -128,7 +136,7 @@ public class InvoiceModel {
 			rowModel.setPrice(row.getPrice());
 			rows.add(rowModel);
 		}
-		this.locked = invoiceDto.isLocked();
+		this.locked.set(invoiceDto.isLocked());
 	}
 
 	private void copyPropertiesToDto() {
@@ -148,28 +156,60 @@ public class InvoiceModel {
 			rowDto.setInvoiceId(id);
 			invoiceDto.getRows().add(rowDto);
 		}
-		invoiceDto.setLocked(locked);
+		invoiceDto.setLocked(locked.get());
 
 	}
 
 	public void printInvoice() {
 		// String file = "c:/temp/FirstPdf.pdf";
-		Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-		Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL,
+		Font catFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+		Font redFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL,
 				BaseColor.RED);
-		Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-		Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+		Font subFont = new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD);
+		Font smallBold = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 
 		try {
-			OutputStream file = new FileOutputStream(new File("SamplePDF.pdf"));
+			OutputStream file = new FileOutputStream(new File("Rechnung.pdf"));
 
 			Document document = new Document();
 			PdfWriter.getInstance(document, file);
 
 			document.open();
-			document.add(new Paragraph("First iText PDF", catFont));
-			document.add(new Paragraph(contact.getLastName(), catFont));
-			document.add(new Paragraph(new Date().toString()));
+			StringBuilder name = new StringBuilder();
+
+			if (contact.getTitle() != null) {
+				name.append(contact.getTitle());
+				name.append(" ");
+			}
+			name.append(contact.getFirstName());
+			name.append(" ");
+			name.append(contact.getLastName());
+
+			document.add(new Paragraph(name.toString(), catFont));
+
+			if (contact.getShippingAddressDto().getStreet() != null
+					&& contact.getShippingAddressDto().getZip() != null
+					&& contact.getShippingAddressDto().getCity() != null) {
+				document.add(new Paragraph(contact.getShippingAddressDto()
+						.getStreet(), catFont));
+				document.add(new Paragraph(contact.getShippingAddressDto()
+						.getZip()
+						+ " "
+						+ contact.getShippingAddressDto().getCity(), catFont));
+			} else {
+				document.add(new Paragraph(contact.getAddressDto().getStreet(),
+						catFont));
+				document.add(new Paragraph(contact.getAddressDto().getZip()
+						+ " " + contact.getAddressDto().getCity(), catFont));
+			}
+			document.add(new Paragraph("Meine GMBH", catFont));
+			document.add(new Paragraph("MyStreet 1", catFont));
+			document.add(new Paragraph("1234 Wien", catFont));
+
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			Date date = new Date();
+
+			document.add(new Paragraph(dateFormat.format(date), catFont));
 
 			document.close();
 			file.close();
@@ -177,7 +217,7 @@ public class InvoiceModel {
 
 			e.printStackTrace();
 		}
-		setLocked(true);
+		locked.set(true);
 	}
 
 	@Override

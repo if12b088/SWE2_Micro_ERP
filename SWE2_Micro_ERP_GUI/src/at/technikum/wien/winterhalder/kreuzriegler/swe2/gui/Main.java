@@ -6,7 +6,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-
+/*
+ * TODO
+ * Rechnung Drucken, Pfad?
+ * Rechnung Sperren (BoolBinding)
+ * NullChecks
+ * Bei Speichern Fenster schliessen
+ * Bei Abbrechen Fenster Schliessen
+ * Alle DTOs Checken (Testen) Speichern und laden
+ * */
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
