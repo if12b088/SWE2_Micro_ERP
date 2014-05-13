@@ -19,7 +19,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.enums.ContactPickerSearchMode;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.enums.ContactPickerSearchType;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper.WindowHelper;
@@ -44,7 +46,12 @@ public class ContactSearch extends AnchorPane {
 	private ListView<ContactModel> contactListView; // Value injected by
 													// FXMLLoader
 	
+	private ContactSearchModel model = new ContactSearchModel();
+	
+	private Stage stage;
+
 	private ContactPickerSearchType searchType = ContactPickerSearchType.CONTACTS;
+	private ContactPickerSearchMode searchMode = ContactPickerSearchMode.OPEN;
 
 	ObservableList<ContactModel> contactItems = FXCollections
 			.observableArrayList();
@@ -53,11 +60,22 @@ public class ContactSearch extends AnchorPane {
 		@Override
 		public void handle(MouseEvent event) {
 			if (event.getClickCount() == 2) {
-				if (contactListView.getSelectionModel().getSelectedItem() != null) {
-					WindowHelper.openContactInNewWindow(contactListView
-							.getSelectionModel().getSelectedItem());
+				if (searchMode == ContactPickerSearchMode.OPEN) {
+					if (contactListView.getSelectionModel().getSelectedItem() != null) {
+						WindowHelper.openContactInNewWindow(contactListView
+								.getSelectionModel().getSelectedItem());
+					}
+					contactListView.getSelectionModel().clearSelection();
+				} else if (searchMode == ContactPickerSearchMode.SELECT) {
+					if (contactListView.getSelectionModel()
+							.getSelectedItem() != null) {
+						model.setSelectedModel(contactListView.getSelectionModel()
+								.getSelectedItem());
+					stage.close();
+					}
+					contactListView.getSelectionModel()
+							.clearSelection();
 				}
-				contactListView.getSelectionModel().clearSelection();
 			}
 		}
 	};
@@ -69,7 +87,7 @@ public class ContactSearch extends AnchorPane {
 			handleSearchContacts();
 		}
 	};
-	
+
 	EventHandler<KeyEvent> handleSearchContactsEnter = new EventHandler<KeyEvent>() {
 
 		@Override
@@ -79,19 +97,18 @@ public class ContactSearch extends AnchorPane {
 					handleSearchContacts();
 				}
 			}
-			
+
 		}
 	};
-	
+
 	EventHandler<ActionEvent> handleSearchCompaniesButton = new EventHandler<ActionEvent>() {
 
 		@Override
 		public void handle(ActionEvent event) {
-			System.out.println("comp");
 			handleSearchCompanies();
 		}
 	};
-	
+
 	EventHandler<KeyEvent> handleSearchCompaniesEnter = new EventHandler<KeyEvent>() {
 
 		@Override
@@ -101,7 +118,7 @@ public class ContactSearch extends AnchorPane {
 					handleSearchCompanies();
 				}
 			}
-			
+
 		}
 	};
 
@@ -124,7 +141,7 @@ public class ContactSearch extends AnchorPane {
 		contactListView.setItems(contactItems);
 		contactListView.addEventHandler(MouseEvent.MOUSE_CLICKED,
 				handleSearchContactsDblClick);
-		setSearchModeToContacts();
+		setSearchTypeToContacts();
 	}
 
 	/**
@@ -140,7 +157,8 @@ public class ContactSearch extends AnchorPane {
 	 *            doubleclickevent on the Listview
 	 */
 
-	public void setHandleSearchContactsDblClick(EventHandler<MouseEvent> newHandleDblClick) {
+	public void setHandleSearchContactsDblClick(
+			EventHandler<MouseEvent> newHandleDblClick) {
 		// remove old handler
 		contactListView.removeEventHandler(MouseEvent.MOUSE_CLICKED,
 				handleSearchContactsDblClick);
@@ -154,7 +172,7 @@ public class ContactSearch extends AnchorPane {
 		WindowHelper.openContactInNewWindow(new ContactModel());
 		// WindowHelper.openWindow();
 	}
-	
+
 	public void handleSearchContacts() {
 		List<ContactDto> contacts = null;
 		try {
@@ -170,9 +188,8 @@ public class ContactSearch extends AnchorPane {
 	public void handleSearchCompanies() {
 		List<ContactDto> contacts = null;
 		try {
-			contacts = ProxyFactory
-					.createContactProxy()
-					.getCompanysByName(searchContactTextField.getText());
+			contacts = ProxyFactory.createContactProxy().getCompanysByName(
+					searchContactTextField.getText());
 		} catch (ConnectionProblemException e) {
 			contactErrMsg.setText(e.getMessage());
 		}
@@ -198,25 +215,58 @@ public class ContactSearch extends AnchorPane {
 		addContactButton.setDisable(true);
 	}
 
-	public void setSearchModeToContacts(){
-		searchContactButton.removeEventHandler(ActionEvent.ACTION, handleSearchCompaniesButton);
-		searchContactTextField.removeEventHandler(KeyEvent.KEY_PRESSED, handleSearchCompaniesEnter);
-		searchContactButton.addEventHandler(ActionEvent.ACTION, handleSearchContactsButton);
-		searchContactTextField.addEventHandler(KeyEvent.KEY_PRESSED, handleSearchContactsEnter);
+	public void setSearchTypeToContacts() {
+		searchContactButton.removeEventHandler(ActionEvent.ACTION,
+				handleSearchCompaniesButton);
+		searchContactTextField.removeEventHandler(KeyEvent.KEY_PRESSED,
+				handleSearchCompaniesEnter);
+		searchContactButton.addEventHandler(ActionEvent.ACTION,
+				handleSearchContactsButton);
+		searchContactTextField.addEventHandler(KeyEvent.KEY_PRESSED,
+				handleSearchContactsEnter);
 		searchType = ContactPickerSearchType.CONTACTS;
 	}
-	
-	public void setSearchModeToCompany(){
-		searchContactButton.removeEventHandler(ActionEvent.ACTION, handleSearchContactsButton);
-		searchContactTextField.removeEventHandler(KeyEvent.KEY_PRESSED, handleSearchContactsEnter);
-		searchContactButton.addEventHandler(ActionEvent.ACTION, handleSearchCompaniesButton);
-		searchContactTextField.addEventHandler(KeyEvent.KEY_PRESSED, handleSearchCompaniesEnter);
+
+	public void setSearchTypeToCompany() {
+		searchContactButton.removeEventHandler(ActionEvent.ACTION,
+				handleSearchContactsButton);
+		searchContactTextField.removeEventHandler(KeyEvent.KEY_PRESSED,
+				handleSearchContactsEnter);
+		searchContactButton.addEventHandler(ActionEvent.ACTION,
+				handleSearchCompaniesButton);
+		searchContactTextField.addEventHandler(KeyEvent.KEY_PRESSED,
+				handleSearchCompaniesEnter);
 		searchType = ContactPickerSearchType.COMPANIES;
 	}
-	
+
+	public void setSearchModeToOpen() {
+		searchMode = ContactPickerSearchMode.OPEN;
+	}
+
+	public void setSearchModeToSelect() {
+		searchMode = ContactPickerSearchMode.SELECT;
+	}
 
 	public void setModels(List<ContactModel> models) {
 		contactItems.clear();
 		contactItems.addAll(models);
+	}
+	
+	public ContactSearchModel getModel(){
+		return this.model;
+	}
+
+	/**
+	 * @return the stage
+	 */
+	public Stage getStage() {
+		return stage;
+	}
+
+	/**
+	 * @param stage the stage to set
+	 */
+	public void setStage(Stage stage) {
+		this.stage = stage;
 	}
 }

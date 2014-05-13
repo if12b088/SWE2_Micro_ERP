@@ -42,8 +42,6 @@ public class ContactPicker extends HBox {
 
 	private ContactPickerModel model = new ContactPickerModel();
 
-	private ContactSearch contactPane = new ContactSearch();
-
 	private ContactPickerSearchType searchType = ContactPickerSearchType.CONTACTS;
 
 	public ContactPicker() {
@@ -67,19 +65,16 @@ public class ContactPicker extends HBox {
 				model.textProperty());
 		contactPickerImageView.imageProperty().bindBidirectional(
 				model.imageProperty());
+		
 	}
 
 	public ContactPickerModel getModel() {
 		return this.model;
 	}
 
-//	@FXML
-//	public void handleDblClick(MouseEvent me) {
-//
-//	}
-
 	public void openPopup(List<ContactModel> contactModels) {
-
+		ContactSearch contactPane = new ContactSearch();
+		contactPane.setSearchModeToSelect();
 		if (contactModels == null) {
 			contactModels = new ArrayList<>();
 		}
@@ -87,37 +82,21 @@ public class ContactPicker extends HBox {
 		final Stage newStage = new Stage();
 		
 		if(searchType == ContactPickerSearchType.CONTACTS){
-			contactPane.setSearchModeToContacts();
+			contactPane.setSearchTypeToContacts();
 		}
 		if(searchType == ContactPickerSearchType.COMPANIES){
-			contactPane.setSearchModeToCompany();			
+			contactPane.setSearchTypeToCompany();			
 		}
-
-		contactPane
-				.setHandleSearchContactsDblClick(new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(MouseEvent event) {
-						if (event.getClickCount() == 2) {
-							if (contactPane.getContactListView()
-									.getSelectionModel().getSelectedItem() != null) {
-								model.setSelectedContact(contactPane
-										.getContactListView()
-										.getSelectionModel().getSelectedItem());
-								newStage.close();
-							}
-							contactPane.getContactListView()
-									.getSelectionModel().clearSelection();
-						}
-					}
-				});
 
 		contactPane.setModels(contactModels);
 		contactPane.disableAddButton();
-
+		contactPane.setStage(newStage);
 		Scene scene = new Scene(contactPane, 800, 600);
 		newStage.setScene(scene);
 		newStage.setTitle("Suche Kontakt");
-		newStage.show();
+		newStage.showAndWait();
+		model.setSelectedContact(contactPane.getModel().getSelectedModel());
+		contactPane = null;
 
 	}
 

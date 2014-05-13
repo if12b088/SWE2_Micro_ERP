@@ -9,11 +9,15 @@ import javafx.stage.Stage;
 /*
  * TODO
  * Rechnung Drucken, Pfad?
- * Rechnung Sperren (BoolBinding)
  * NullChecks
  * Bei Speichern Fenster schliessen
  * Bei Abbrechen Fenster Schliessen
  * Alle DTOs Checken (Testen) Speichern und laden
+ * Rechnung BRUTTO + gesammtpreis beim Tippen
+ * Constants in Properties File Matthias auch
+ * Doku
+ * CodeCoverage
+ * CodeSyle Checkstyle
  * */
 public class Main extends Application {
 	@Override

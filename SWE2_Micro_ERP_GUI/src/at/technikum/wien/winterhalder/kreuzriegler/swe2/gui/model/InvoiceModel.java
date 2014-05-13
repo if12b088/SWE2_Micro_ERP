@@ -1,5 +1,6 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -17,8 +18,12 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.InvoiceRowDto;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class InvoiceModel {
@@ -39,16 +44,8 @@ public class InvoiceModel {
 	private StringProperty comment = new SimpleStringProperty();
 	private ObservableList<InvoiceRowModel> rows = FXCollections
 			.observableArrayList();
-	// private boolean locked = false;
 
 	private BooleanProperty locked = new SimpleBooleanProperty();
-
-	// private BooleanBinding isLocked = new BooleanBinding() {
-	// @Override
-	// protected boolean computeValue() {
-	// return locked;
-	// }
-	// };
 
 	public InvoiceDto getinvoiceDto() {
 		copyPropertiesToDto();
@@ -169,7 +166,8 @@ public class InvoiceModel {
 		Font smallBold = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
 
 		try {
-			OutputStream file = new FileOutputStream(new File("Rechnung.pdf"));
+			File fileName = new File("Rechnung.pdf");
+			OutputStream file = new FileOutputStream(fileName);
 
 			Document document = new Document();
 			PdfWriter.getInstance(document, file);
@@ -211,8 +209,45 @@ public class InvoiceModel {
 
 			document.add(new Paragraph(dateFormat.format(date), catFont));
 
+			// Table
+
+			PdfPTable table = new PdfPTable(4);
+
+			// t.setBorderColor(BaseColor.GRAY);
+			// t.setPadding(4);
+			// t.setSpacing(4);
+			// t.setBorderWidth(1);
+
+			PdfPCell cellName = new PdfPCell(new Phrase("Name"));
+			cellName.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cellName);
+
+			PdfPCell cellAmount = new PdfPCell(new Phrase("Anzahl"));
+			cellAmount.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cellAmount);
+
+			PdfPCell cellUst = new PdfPCell(new Phrase("Ust"));
+			cellUst.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cellUst);
+
+			PdfPCell cellPrice = new PdfPCell(new Phrase("Preis"));
+			cellPrice.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cellPrice);
+
+			table.setHeaderRows(1);
+
+			for (InvoiceRowModel row : rows) {
+				table.addCell(row.getName());
+				table.addCell(row.getAmount().toString());
+				table.addCell(row.getUst().toString());
+				table.addCell(row.getPrice().toString());
+			}
+			document.add(table);
+			
 			document.close();
 			file.close();
+			//Open PDF in new Window
+		//	Desktop.getDesktop().open(fileName);
 		} catch (Exception e) {
 
 			e.printStackTrace();
