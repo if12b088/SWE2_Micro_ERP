@@ -3,6 +3,7 @@ package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Logger;
 
 import javafx.beans.binding.Binding;
 import javafx.collections.FXCollections;
@@ -25,9 +26,12 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ContactWa
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ModelDataNotValidException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.ContactModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceModel;
+import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model.InvoiceRowModel;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 
 public class ContactController extends AbstractController {
+
+	private static final Logger logger = Logger.getLogger(ContactController.class.getName());
 
 	// tabs
 	@FXML

@@ -3,6 +3,7 @@ package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleStringProperty;
@@ -13,7 +14,6 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.AddressDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.dto.ContactDto;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.enums.AddressType;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.Utils;
-import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactPicker;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ConnectionProblemException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.exceptions.ModelDataNotValidException;
 import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.helper.DateHelper;
@@ -22,6 +22,9 @@ import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.proxy.ProxyFactory;
 public class ContactModel {
 	// ID
 	private long id;
+
+	private static final Logger logger = Logger.getLogger(ContactModel.class
+			.getName());
 
 	// Error
 	private StringProperty errorMsg = new SimpleStringProperty();

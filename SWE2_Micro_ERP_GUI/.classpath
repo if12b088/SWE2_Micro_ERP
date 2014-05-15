@@ -14,5 +14,6 @@
 	<classpathentry exported="true" kind="lib" path="gson-2.2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="jfxrt.jar"/>
 	<classpathentry exported="true" kind="lib" path="itextpdf-5.5.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="log4j-core-2.0-rc1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

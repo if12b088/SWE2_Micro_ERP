@@ -72,9 +72,16 @@ public class InvoiceController {
 	// FXMLLoader
 	@FXML
 	// fx:id="invoiceRowPriceTableColumn"
-	private TableColumn<InvoiceRowModel, Double> invoiceRowPriceTableColumn; // Value
+	private TableColumn<InvoiceRowModel, Double> invoiceRowNetPriceTableColumn; // Value
 																				// injected
 																				// by
+	// FXMLLoader
+	@FXML
+	// fx:id="invoiceRowPriceTableColumn"
+	private TableColumn<InvoiceRowModel, Double> invoiceRowGrossPriceTableColumn; // Value
+	// injected
+	// by
+
 	@FXML
 	// fx:id="invoiceRowDeleteTableColumn"
 	private TableColumn<InvoiceRowModel, Boolean> invoiceRowDeleteTableColumn; // Value
@@ -116,6 +123,9 @@ public class InvoiceController {
 	private Button printInvoice;
 
 	@FXML
+	private Label invoiceSum;
+
+	@FXML
 	private Label errMsg;
 
 	private InvoiceModel model;
@@ -133,10 +143,12 @@ public class InvoiceController {
 		if (model.getContact() != null) {
 			contactPicker.getModel().setSelectedContact(model.getContact());
 		}
-//		metaPane.disableProperty().bind(model.isLockedBinding());
-//		rowPane.disableProperty().bind(model.isLockedBinding());
+		// metaPane.disableProperty().bind(model.isLockedBinding());
+		// rowPane.disableProperty().bind(model.isLockedBinding());
 		metaPane.disableProperty().bind(model.lockedProperty());
 		rowPane.disableProperty().bind(model.lockedProperty());
+		
+		invoiceSum.textProperty().bind(model.sumCalculationBinding());
 
 		errMsg.textProperty().bind(model.errorMsgProperty());
 		invoiceNumber.textProperty().bindBidirectional(model.nrProperty());
@@ -210,14 +222,15 @@ public class InvoiceController {
 						((InvoiceRowModel) event.getTableView().getItems()
 								.get(event.getTablePosition().getRow()))
 								.setUst(event.getNewValue());
+						model.sumCalculationBinding().invalidate();
 					}
 				});
 
-		// TableColumn PRICE
-		invoiceRowPriceTableColumn
+		// TableColumn NET PRICE
+		invoiceRowNetPriceTableColumn
 				.setCellValueFactory(new PropertyValueFactory<InvoiceRowModel, Double>(
-						"price"));
-		invoiceRowPriceTableColumn
+						"netPrice"));
+		invoiceRowNetPriceTableColumn
 				.setCellFactory(new Callback<TableColumn<InvoiceRowModel, Double>, TableCell<InvoiceRowModel, Double>>() {
 
 					@Override
@@ -226,7 +239,7 @@ public class InvoiceController {
 						return new DoubleCell();
 					}
 				});
-		invoiceRowPriceTableColumn
+		invoiceRowNetPriceTableColumn
 				.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<InvoiceRowModel, Double>>() {
 
 					@Override
@@ -234,9 +247,15 @@ public class InvoiceController {
 							CellEditEvent<InvoiceRowModel, Double> event) {
 						((InvoiceRowModel) event.getTableView().getItems()
 								.get(event.getTablePosition().getRow()))
-								.setPrice(event.getNewValue());
+								.setNetPrice(event.getNewValue());
+						model.sumCalculationBinding().invalidate();
 					}
 				});
+
+		// TableColumn GROSS PRICE
+		invoiceRowGrossPriceTableColumn
+				.setCellValueFactory(new PropertyValueFactory<InvoiceRowModel, Double>(
+						"grossPrice"));
 
 		// TableColumn DELETE
 		invoiceRowDeleteTableColumn.setSortable(false);
@@ -289,9 +308,9 @@ public class InvoiceController {
 		}
 
 		if (invoiceRowPrice.getText().isEmpty()) {
-			row.setPrice(0d);
+			row.setNetPrice(0d);
 		} else {
-			row.setPrice(Double.parseDouble(invoiceRowPrice.getText()));
+			row.setNetPrice(Double.parseDouble(invoiceRowPrice.getText()));
 		}
 
 		model.getRows().add(row);

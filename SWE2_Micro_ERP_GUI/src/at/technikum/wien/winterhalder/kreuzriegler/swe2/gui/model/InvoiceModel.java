@@ -1,12 +1,12 @@
 package at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.model;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -37,16 +37,31 @@ public class InvoiceModel {
 
 	private InvoiceDto invoiceDto = new InvoiceDto();
 
-	// private ContactDto contactReference = new ContactDto();
-
 	private StringProperty nr = new SimpleStringProperty();
 	private StringProperty infomation = new SimpleStringProperty();
 	private StringProperty comment = new SimpleStringProperty();
+	private StringProperty sum = new SimpleStringProperty();
 	private ObservableList<InvoiceRowModel> rows = FXCollections
 			.observableArrayList();
 
+	private StringBinding sumCalculation = new StringBinding() {
+
+		@Override
+		protected String computeValue() {
+			double newSum = 0;
+			for (InvoiceRowModel row : rows) {
+				newSum += row.getGrossPrice();
+			}
+			return Math.round(newSum*100)/100 + "";
+		}
+	};
+
 	private BooleanProperty locked = new SimpleBooleanProperty();
 
+	public InvoiceModel(){
+		
+	}
+	
 	public InvoiceDto getinvoiceDto() {
 		copyPropertiesToDto();
 		return invoiceDto;
@@ -65,30 +80,10 @@ public class InvoiceModel {
 		this.contact = contact;
 	}
 
-	// public BooleanBinding isLockedBinding() {
-	// return isLocked;
-	// }
-	//
-	// /**
-	// * @return the locked
-	// */
-	// public boolean isLocked() {
-	// return locked;
-	// }
-	//
-	// /**
-	// * @param locked
-	// * the locked to set
-	// */
-	// public void setLocked(boolean locked) {
-	// this.locked = locked;
-	// }
-
 	public final BooleanProperty lockedProperty() {
 		return locked;
 	}
 
-	// errorMsg
 	public String getErrorMsg() {
 		return errorMsg.get();
 	}
@@ -109,7 +104,17 @@ public class InvoiceModel {
 		return comment;
 	}
 
-	// errorMsg
+	public final StringProperty sumProperty() {
+		return sum;
+	}
+
+	/**
+	 * @return the sumCalculation
+	 */
+	public StringBinding sumCalculationBinding() {
+		return sumCalculation;
+	}
+
 	public final StringProperty errorMsgProperty() {
 		return errorMsg;
 	}
@@ -130,7 +135,8 @@ public class InvoiceModel {
 			rowModel.setName(row.getName());
 			rowModel.setAmount(row.getAmount());
 			rowModel.setUst(row.getUst());
-			rowModel.setPrice(row.getPrice());
+			rowModel.setNetPrice(row.getPrice());
+			rowModel.setGrossPrice(row.getPrice() * (row.getUst() / 100 + 1));
 			rows.add(rowModel);
 		}
 		this.locked.set(invoiceDto.isLocked());
@@ -149,12 +155,11 @@ public class InvoiceModel {
 			rowDto.setName(row.getName());
 			rowDto.setAmount(row.getAmount());
 			rowDto.setUst(row.getUst());
-			rowDto.setPrice(row.getPrice());
+			rowDto.setPrice(row.getNetPrice());
 			rowDto.setInvoiceId(id);
 			invoiceDto.getRows().add(rowDto);
 		}
 		invoiceDto.setLocked(locked.get());
-
 	}
 
 	public void printInvoice() {
@@ -211,7 +216,7 @@ public class InvoiceModel {
 
 			// Table
 
-			PdfPTable table = new PdfPTable(4);
+			PdfPTable table = new PdfPTable(5);
 
 			// t.setBorderColor(BaseColor.GRAY);
 			// t.setPadding(4);
@@ -230,9 +235,13 @@ public class InvoiceModel {
 			cellUst.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(cellUst);
 
-			PdfPCell cellPrice = new PdfPCell(new Phrase("Preis"));
-			cellPrice.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(cellPrice);
+			PdfPCell cellNetPrice = new PdfPCell(new Phrase("Netto"));
+			cellNetPrice.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cellNetPrice);
+
+			PdfPCell cellGrossPrice = new PdfPCell(new Phrase("Brutto"));
+			cellGrossPrice.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cellGrossPrice);
 
 			table.setHeaderRows(1);
 
@@ -240,14 +249,16 @@ public class InvoiceModel {
 				table.addCell(row.getName());
 				table.addCell(row.getAmount().toString());
 				table.addCell(row.getUst().toString());
-				table.addCell(row.getPrice().toString());
+				table.addCell(row.getNetPrice().toString());
+				table.addCell(row.getGrossPrice().toString());
 			}
 			document.add(table);
-			
+			document.add(new Paragraph("Summe: " + sum.get(), catFont));
+
 			document.close();
 			file.close();
-			//Open PDF in new Window
-		//	Desktop.getDesktop().open(fileName);
+			// Open PDF in new Window
+			// Desktop.getDesktop().open(fileName);
 		} catch (Exception e) {
 
 			e.printStackTrace();

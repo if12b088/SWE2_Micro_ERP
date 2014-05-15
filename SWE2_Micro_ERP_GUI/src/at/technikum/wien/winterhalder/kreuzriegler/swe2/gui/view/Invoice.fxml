@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import at.technikum.wien.winterhalder.kreuzriegler.swe2.gui.customControl.ContactPicker?>
+<?import javafx.scene.control.Label?>
 
 <ScrollPane prefHeight="800.0" prefWidth="600.0"
 	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
@@ -58,25 +59,29 @@
 									layoutY="30.0" mnemonicParsing="false" onAction="#handleAddRow"
 									text="+" />
 								<TableView fx:id="invoiceRowTableView" layoutX="20.0"
-									layoutY="75.0" prefHeight="280.0" prefWidth="550.0">
+									layoutY="75.0" prefHeight="250.0" prefWidth="550.0">
 									<columns>
 										<TableColumn fx:id="invoiceRowNameTableColumn"
-											prefWidth="320.0" text="Name" />
+											prefWidth="258.0" text="Name" />
 										<TableColumn fx:id="invoiceRowAmountTableColumn"
 											prefWidth="70.0" text="Anzahl" />
 										<TableColumn fx:id="invoiceRowUstTableColumn"
 											prefWidth="60.0" text="UST" />
-										<TableColumn fx:id="invoiceRowPriceTableColumn"
-											minWidth="0.0" prefWidth="58.0" text="Preis" />
+										<TableColumn fx:id="invoiceRowNetPriceTableColumn"
+											minWidth="0.0" prefWidth="60.0" text="Netto" />
+										<TableColumn fx:id="invoiceRowGrossPriceTableColumn"
+											minWidth="0.0" prefWidth="60.0" text="Brutto" />
 										<TableColumn fx:id="invoiceRowDeleteTableColumn"
 											prefWidth="40.0" />
 									</columns>
 								</TableView>
+								<Label layoutX="400" layoutY="340" text="Summe:" />
+								<Label fx:id="invoiceSum" layoutX="450" layoutY="340.0" />
 								<Button fx:id="saveInvoice" layoutX="490.0" layoutY="371.0"
 									mnemonicParsing="false" text="Speichern" onAction="#onSaveInvoice" />
 								<Button fx:id="abortInvoice" layoutX="392.33837890625"
 									layoutY="371.0" mnemonicParsing="false" text="Abbrechen" />
-								<Label fx:id="errMsg" layoutX="40.353271484375" layoutY="376.0"
+								<Label fx:id="errMsg" layoutX="40" layoutY="376.0"
 									textFill="#f50a0a" />
 							</children>
 						</AnchorPane>
